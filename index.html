@@ -21,6 +21,7 @@
 html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 1rem)}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{
+  display:flex;flex-direction:column;min-height:100vh;min-height:100svh;
   margin:0;background:var(--night);color:var(--star);
   font-family:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",Arial,sans-serif;
   font-size:1.0625rem;line-height:1.8;
@@ -28,18 +29,19 @@ body{
 a{color:inherit}
 :focus-visible{outline:2px solid var(--accretion);outline-offset:3px}
 .display{font-family:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif}
-.wrap{max-width:680px;margin:0 auto;padding:0 1.25rem}
+.wrap{width:100%;max-width:680px;margin:0 auto;padding:0 1.25rem}
+#scene{flex:1 0 auto;width:100%;min-height:260px}
 
 /* hero: the stations as a constellation */
-.hero{padding:2.5rem 0 1.5rem;text-align:center}
-.hero h1{margin:0;font-size:clamp(2.6rem,11vw,4.2rem);line-height:1.1;font-weight:700}
+.hero{padding:1.75rem 1.25rem .5rem;text-align:center}
+.hero h1{margin:0;font-size:clamp(2.2rem,9vw,3.2rem);line-height:1.1;font-weight:700}
 .hero p{margin:.6rem auto 0;color:var(--muted);max-width:28rem}
-.sky{display:block;width:100%;height:auto;margin:1.25rem 0 .25rem;overflow:visible}
+.sky{display:block;width:100%;max-width:320px;height:auto;margin:.75rem auto 0;overflow:visible}
 .sky .link{stroke:var(--star);stroke-opacity:.4;stroke-width:1.5;fill:none}
 .sky a{cursor:pointer;text-decoration:none}
 .sky .halo{fill:var(--accretion);opacity:.22}
 .sky .core{fill:var(--star)}
-.sky text{fill:var(--star);font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:19px;font-weight:700}
+.sky text{fill:var(--star);font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:16px;font-weight:600}
 .sky a:hover .halo,.sky a:focus-visible .halo{opacity:.4}
 .sky .bg{fill:var(--star)}
 .hint{color:var(--muted);font-size:.9rem;margin:0}
@@ -75,9 +77,9 @@ a{color:inherit}
 .tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(.4rem,2vw,.7rem);padding-top:1.25rem;padding-bottom:.25rem}
 .tabs a{
   display:inline-flex;align-items:center;justify-content:center;text-align:center;
-  min-height:clamp(44px,11vw,56px);padding:0 clamp(.85rem,4vw,1.5rem);border-radius:999px;
+  min-height:40px;padding:0 clamp(.7rem,3vw,1rem);border-radius:999px;
   border:1px solid var(--line);color:var(--muted);text-decoration:none;
-  font-size:clamp(.95rem,4vw,1.2rem);line-height:1.3;
+  font-size:clamp(.82rem,3.3vw,.95rem);line-height:1.3;
 }
 .tabs a[aria-current="page"]{background:var(--accretion);border-color:var(--accretion);color:#1B1030;font-weight:600}
 .station{border-top:0;padding-top:1.5rem}
@@ -93,7 +95,7 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;text-align:center;
    Each station needs: id (used in the link, English, no spaces), title,
    by (presenters), body, emblem (time | voyager | vr | blackhole).
    Optional: fact, image ("images/file.jpg"), link { label, href }.
-   x, y place the star in the top constellation (0-360 across, 0-360 down).
+   x, y place the star in the top constellation (0-360 across, 0-320 down).
    ===================================================================== */
 const EVENT = {
   title: "أسبوع الفلك",
@@ -103,27 +105,27 @@ const EVENT = {
 
 const STATIONS = [
   {
-    id: "time-travel", emblem: "time", x: 80, y: 80,
+    id: "time-travel", emblem: "time", x: 80, y: 62,
     title: "السفر عبر الزمن",
     by: "تولين",
     body: "هل يمكن أن يمر الزمن عند شخص أبطأ منه عند غيره؟ تقول النسبية الخاصة إنه كلما زادت سرعة الجسم تباطأ الزمن عنده، وتقول النسبية العامة إن الزمن يتباطأ أيضًا قرب الكتل الضخمة، وهنا يظهر دور الثقوب السوداء.",
     fact: "ساعات أقمار نظام GPS تتقدم نحو ٣٨ ميكروثانية كل يوم مقارنة بساعات الأرض، ولو لم يصحّحها العلماء لأخطأت الخرائط بعدة كيلومترات يوميًا."
   },
   {
-    id: "voyager", emblem: "voyager", x: 260, y: 60,
+    id: "voyager", emblem: "voyager", x: 262, y: 44,
     title: "مركبة فوياجر",
     by: "جوري وسارة وجود",
     body: "غادرت مركبة فوياجر الأرض عام ١٩٧٧ ولم تعد أبدًا. نعرض الصور التي التقطتها خلال رحلتها بين الكواكب، ونشرح كيف تصل معلوماتها إلينا من أبعد نقطة وصل إليها جسم صنعه الإنسان.",
     fact: "إشارة فوياجر ١ تحتاج اليوم نحو ٢٣ ساعة لتصل إلى الأرض، رغم أنها تسير بسرعة الضوء."
   },
   {
-    id: "vr", emblem: "vr", x: 285, y: 220,
+    id: "vr", emblem: "vr", x: 280, y: 170,
     title: "الفلك بالواقع الافتراضي",
     by: "فاطمة",
     body: "محطة تفاعلية تحوّل ما نتعلمه عن الفلك إلى تجربة تعيشها بنفسك. ارتدِ النظارة وتجوّل في الفضاء عن قرب."
   },
   {
-    id: "black-holes", emblem: "blackhole", x: 125, y: 300,
+    id: "black-holes", emblem: "blackhole", x: 125, y: 255,
     title: "الثقوب السوداء",
     by: "منار",
     body: "الثقب الأسود ليس فراغًا، بل كمية هائلة من المادة مضغوطة في مساحة صغيرة جدًا، جاذبيتها قوية لدرجة أن الضوء نفسه لا يستطيع الهروب منها. نشرح كيف تتكون، ونعرض أول صورة حقيقية التُقطت لثقب أسود.",
@@ -136,8 +138,10 @@ const STATIONS = [
 <header class="hero wrap">
   <h1 class="display" id="eventTitle"></h1>
   <p id="eventIntro"></p>
-  <svg class="sky" id="sky" viewBox="0 0 360 360" role="navigation" aria-label="أركان المعرض"></svg>
+  <svg class="sky" id="sky" viewBox="0 0 360 320" role="navigation" aria-label="أركان المعرض"></svg>
 </header>
+
+<div id="scene" aria-hidden="true"></div>
 
 <nav class="tabs wrap" id="tabs" aria-label="الأركان" hidden></nav>
 
@@ -167,7 +171,7 @@ const sky = document.getElementById("sky");
 let seed = 7;
 const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
 for(let i = 0; i < 70; i++){
-  el("circle", {class:"bg", cx:(rnd()*360).toFixed(1), cy:(rnd()*360).toFixed(1), r:(rnd()*1.1 + .3).toFixed(2), opacity:(rnd()*.5 + .15).toFixed(2)}, sky);
+  el("circle", {class:"bg", cx:(rnd()*320).toFixed(1), cy:(rnd()*360).toFixed(1), r:(rnd()*1.1 + .3).toFixed(2), opacity:(rnd()*.5 + .15).toFixed(2)}, sky);
 }
 // lines join the stations in order, closing the shape
 const pts = STATIONS.map(s => [s.x, s.y]);
@@ -181,11 +185,11 @@ STATIONS.forEach((s, i) => {
   const a = el("a", {href:"#" + s.id, class:"star"}, sky);
   a.style.setProperty("--d", (0.2 + i*0.25) + "s");
   el("title", {}, a).textContent = s.title;
-  el("circle", {class:"halo", cx:s.x, cy:s.y, r:30}, a);
-  el("circle", {class:"core", cx:s.x, cy:s.y, r:8}, a);
+  el("circle", {class:"halo", cx:s.x, cy:s.y, r:22}, a);
+  el("circle", {class:"core", cx:s.x, cy:s.y, r:6}, a);
   // keep labels inside the frame: put them below stars near the top, above otherwise
-  const below = s.y < 120;
-  const t = el("text", {x:s.x, y:s.y + (below ? 46 : -38), "text-anchor":"middle"}, a);
+  const below = s.y < 100;
+  const t = el("text", {x:s.x, y:s.y + (below ? 38 : -30), "text-anchor":"middle"}, a);
   t.textContent = s.title;
   // nudge long labels back inside the sky so none get cut off at the screen edge
   try{
@@ -227,7 +231,7 @@ STATIONS.forEach(s => {
   main.appendChild(sec);
 });
 
-/* ---- starfield + home-page space scene: fixed full-screen canvas behind everything ---- */
+/* ---- starfield (whole page) + space scene (only in the #scene zone of the home page) ---- */
 (function(){
   const cv = document.createElement("canvas");
   cv.id = "starfield"; cv.setAttribute("aria-hidden", "true");
@@ -235,10 +239,11 @@ STATIONS.forEach(s => {
   const ctx = cv.getContext("2d");
   if(!ctx) return;
   const still = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
-  const heroEl = document.querySelector(".hero");
-  let stars = [], w = 0, h = 0, bh = {x:0, y:0, r:20, bits:[]};
-  let things = [], nextComet = 1, nextSat = 4, nextProbe = 9, fade = 0, last = 0;
+  const heroEl = document.querySelector(".hero"), zoneEl = document.getElementById("scene");
+  let stars = [], w = 0, h = 0, zw = 0, zh = 0;
+  let bits = [], things = [], nextComet = 1, nextSat = 4, nextProbe = 9, fade = 0, last = 0, seeded = false;
   const rand = (a, b) => a + Math.random() * (b - a);
+  for(let i = 0; i < 46; i++) bits.push({a:Math.random()*6.28, d:rand(1.3, 4.2), s:rand(.7, 1.3)});
 
   function build(){
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -253,11 +258,6 @@ STATIONS.forEach(s => {
       stars.push({x:r()*w, y:r()*h, r:r()*1.2 + .3, a:r()*.5 + .25, p:r()*6.28, v:r()*1.5 + .5,
                   c:r() < .12 ? "255,179,92" : r() < .2 ? "159,216,240" : "237,232,218"});
     }
-    // black hole sits low on the screen, partly tucked into the corner
-    bh.r = Math.max(14, Math.min(w, h) * .05);
-    bh.x = w * .82; bh.y = h * .84;
-    bh.bits = [];
-    for(let i = 0; i < 46; i++) bh.bits.push({a:Math.random()*6.28, d:rand(1.3, 4.2), s:rand(.7, 1.3)});
   }
 
   function drawStars(t){
@@ -274,27 +274,25 @@ STATIONS.forEach(s => {
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
   }
   function shade(x, y, r){
-    // night side: darken the lower-right of a planet
     const g = ctx.createRadialGradient(x - r * .5, y - r * .5, r * .6, x, y, r * 1.05);
     g.addColorStop(0, "rgba(14,16,51,0)"); g.addColorStop(1, "rgba(14,16,51,.65)");
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
   }
-  function drawPlanets(t){
-    const u = Math.min(w, h), tt = still ? 0 : t / 1000;
-    ctx.save();
-    ctx.globalAlpha *= .8;
 
-    // Saturn, top left, with rings
-    let r = u * .075, x = w * .14, y = h * .16 + Math.sin(tt * .5) * 5;
+  // all scene coordinates are local to the zone: (0,0) top-left, zw x zh
+  function drawPlanets(t){
+    const u = Math.min(zw * .5, zh), tt = still ? 0 : t / 1000;
+    let r, x, y;
+    // Saturn
+    r = u * .1; x = zw * .2; y = zh * .27 + Math.sin(tt * .5) * 4;
     ctx.save(); ctx.translate(x, y); ctx.rotate(-.35);
     ctx.strokeStyle = "rgba(237,232,218,.55)"; ctx.lineWidth = r * .22;
     ctx.beginPath(); ctx.ellipse(0, 0, r * 1.9, r * .55, 0, Math.PI, 6.2832); ctx.stroke();
     ball(0, 0, r, "#F4D9A0", "#B98A4A"); shade(0, 0, r);
     ctx.beginPath(); ctx.ellipse(0, 0, r * 1.9, r * .55, 0, 0, Math.PI); ctx.stroke();
     ctx.restore();
-
-    // Jupiter, right side, with bands
-    r = u * .09; x = w * .93; y = h * .42 + Math.sin(tt * .4 + 2) * 6;
+    // Jupiter
+    r = u * .12; x = zw * .58; y = zh * .24 + Math.sin(tt * .4 + 2) * 5;
     ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip();
     ball(x, y, r, "#F0CFA4", "#B97B4E");
     ["rgba(150,90,60,.45)", "rgba(240,225,200,.35)", "rgba(150,90,60,.5)", "rgba(240,225,200,.3)"].forEach((c, i) => {
@@ -302,9 +300,8 @@ STATIONS.forEach(s => {
     });
     ctx.fillStyle = "rgba(190,80,60,.7)"; ctx.beginPath(); ctx.ellipse(x - r * .2, y + r * .3, r * .22, r * .12, 0, 0, 6.2832); ctx.fill();
     shade(x, y, r); ctx.restore();
-
-    // Earth with an orbiting moon, left side
-    r = u * .055; x = w * .1; y = h * .58 + Math.sin(tt * .45 + 4) * 5;
+    // Earth + moon
+    r = u * .07; x = zw * .22; y = zh * .74 + Math.sin(tt * .45 + 4) * 4;
     ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip();
     ball(x, y, r, "#7FC4F2", "#1E5FA8");
     ctx.fillStyle = "rgba(90,170,100,.85)";
@@ -315,21 +312,17 @@ STATIONS.forEach(s => {
     ctx.strokeStyle = "rgba(237,232,218,.15)"; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.ellipse(x, y, r * 2.2, r * .7, 0, 0, 6.2832); ctx.stroke();
     ball(mx, my, r * .22, "#EDE8DA", "#9A98A8");
-
-    // Mars, small, lower middle-left
-    r = u * .032; x = w * .38; y = h * .9 + Math.sin(tt * .6 + 1) * 4;
+    // Mars
+    r = u * .04; x = zw * .5; y = zh * .8 + Math.sin(tt * .6 + 1) * 3;
     ball(x, y, r, "#F08C5C", "#A83A1E"); shade(x, y, r);
-    ctx.restore();
   }
 
   function drawBlackHole(dt){
-    const {x, y, r} = bh, tilt = .3;
-    // glow
+    const r = u0() * .07, x = zw * .8, y = zh * .62, tilt = .3;
     const g = ctx.createRadialGradient(x, y, r * .8, x, y, r * 5);
     g.addColorStop(0, "rgba(255,179,92,.28)"); g.addColorStop(1, "rgba(255,179,92,0)");
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 5, 0, 6.2832); ctx.fill();
-    // matter spiralling in: far side first, then the hole, then the near side
-    for(const b of bh.bits){
+    for(const b of bits){
       b.a += dt * 1.6 * b.s / Math.pow(b.d, 1.5);
       b.d -= dt * .12 * b.s;
       if(b.d < 1.1){ b.d = rand(3.6, 4.4); b.a = Math.random() * 6.28; }
@@ -339,21 +332,22 @@ STATIONS.forEach(s => {
       ctx.fillStyle = "rgba(255," + Math.round(210 - 90 * heat) + "," + Math.round(140 - 70 * heat) + "," + (.35 + .5 * heat).toFixed(2) + ")";
       ctx.beginPath(); ctx.arc(x + Math.cos(b.a) * b.d * r, y + Math.sin(b.a) * b.d * r * tilt, 1.2 + heat, 0, 6.2832); ctx.fill();
     };
-    bh.bits.forEach(b => { if(Math.sin(b.a) < 0) put(b); });
+    bits.forEach(b => { if(Math.sin(b.a) < 0) put(b); });
     ctx.fillStyle = "#000"; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
     ctx.strokeStyle = "rgba(255,179,92,.8)"; ctx.lineWidth = 1.5; ctx.stroke();
-    bh.bits.forEach(b => { if(Math.sin(b.a) >= 0) put(b); });
+    bits.forEach(b => { if(Math.sin(b.a) >= 0) put(b); });
   }
+  function u0(){ return Math.min(zw * .5, zh); }
 
   function spawn(kind){
     if(kind === "comet"){
-      const s = rand(240, 380);
-      things.push({k:"comet", x:rand(w * .25, w + 80), y:-30, vx:-s * .8, vy:s * .6, len:rand(70, 130)});
+      const s = rand(200, 320);
+      things.push({k:"comet", x:rand(zw * .3, zw + 60), y:-30, vx:-s * .8, vy:s * .6, len:rand(60, 110)});
     }else if(kind === "sat"){
       const left = Math.random() < .5;
-      things.push({k:"sat", x:left ? -30 : w + 30, y:rand(h * .08, h * .45), vx:(left ? 1 : -1) * rand(35, 55), vy:rand(-6, 10), t:0});
+      things.push({k:"sat", x:left ? -30 : zw + 30, y:rand(zh * .1, zh * .45), vx:(left ? 1 : -1) * rand(35, 55), vy:rand(-4, 8), t:0});
     }else{
-      things.push({k:"probe", x:w + 40, y:rand(h * .45, h * .7), vx:-rand(14, 22), vy:rand(-3, 3), t:0});
+      things.push({k:"probe", x:zw + 40, y:rand(zh * .45, zh * .65), vx:-rand(14, 22), vy:rand(-3, 3), t:0});
     }
   }
 
@@ -366,7 +360,7 @@ STATIONS.forEach(s => {
       ctx.strokeStyle = g; ctx.lineWidth = 2.5; ctx.lineCap = "round";
       ctx.beginPath(); ctx.moveTo(o.x, o.y); ctx.lineTo(tx, ty); ctx.stroke();
       ctx.fillStyle = "#EDE8DA"; ctx.beginPath(); ctx.arc(o.x, o.y, 3, 0, 6.2832); ctx.fill();
-      return o.y < h + 50 && o.x > -150;
+      return o.y < zh + 50 && o.x > -150;
     }
     ctx.save(); ctx.translate(o.x, o.y); ctx.rotate(Math.atan2(o.vy, o.vx));
     if(o.k === "sat"){
@@ -375,7 +369,6 @@ STATIONS.forEach(s => {
       ctx.strokeStyle = "rgba(14,16,51,.6)"; ctx.lineWidth = .6; ctx.strokeRect(-4, -13, 8, 8); ctx.strokeRect(-4, 5, 8, 8);
       if(Math.sin(o.t * 5) > 0){ ctx.fillStyle = "#FF6B5C"; ctx.beginPath(); ctx.arc(0, 0, 1.6, 0, 6.2832); ctx.fill(); }
     }else{
-      // Voyager: dish, boom, body and a few radio waves
       ctx.strokeStyle = "#EDE8DA"; ctx.lineWidth = 1.4;
       ctx.beginPath(); ctx.ellipse(-4, 0, 3.5, 8, 0, -1.57, 1.57, true); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(-4, 0); ctx.lineTo(7, 0); ctx.stroke();
@@ -388,7 +381,7 @@ STATIONS.forEach(s => {
       }
     }
     ctx.restore();
-    return o.x > -80 && o.x < w + 80 && o.y > -80 && o.y < h + 80;
+    return o.x > -80 && o.x < zw + 80 && o.y > -80 && o.y < zh + 80;
   }
 
   function frame(now){
@@ -396,10 +389,15 @@ STATIONS.forEach(s => {
     last = t;
     ctx.clearRect(0, 0, w, h);
     drawStars(t);
-    const home = !heroEl.hidden;
+    const home = !heroEl.hidden, rc = zoneEl.getBoundingClientRect();
+    zw = rc.width; zh = rc.height;
     fade += ((home ? 1 : 0) - fade) * Math.min(1, dt * 4);
     if(still) fade = home ? 1 : 0;
-    if(fade > .02){
+    if(fade > .02 && zh > 40){
+      if(!seeded && !still){ seeded = true; spawn("comet"); spawn("sat"); things[1].x = zw * .5; }
+      ctx.save();
+      ctx.beginPath(); ctx.rect(rc.left, rc.top, zw, zh); ctx.clip();   // nothing is drawn outside the zone
+      ctx.translate(rc.left, rc.top);
       ctx.globalAlpha = fade;
       drawPlanets(t);
       drawBlackHole(still ? 0 : dt);
@@ -412,16 +410,15 @@ STATIONS.forEach(s => {
         }
         things = things.filter(o => drawThing(o, dt));
       }
-      ctx.globalAlpha = 1;
+      ctx.restore();
     }else if(!home){ things = []; }
     if(!still) requestAnimationFrame(frame);
   }
 
   build(); requestAnimationFrame(frame);
-  // a first comet and satellite so the scene isn't empty on arrival
-  if(!still){ spawn("comet"); spawn("sat"); things[1].x = w * .5; }
   window.addEventListener("resize", () => { build(); if(still) requestAnimationFrame(frame); });
   window.addEventListener("hashchange", () => { if(still) requestAnimationFrame(frame); });
+  window.addEventListener("scroll", () => { if(still) requestAnimationFrame(frame); }, {passive:true});
 })();
 
 /* ---- tabs: show one topic at a time ---- */
@@ -442,6 +439,7 @@ function route(){
   const known = STATIONS.some(s => s.id === id);
   if(!known) id = "";
   hero.hidden = !!id;
+  document.getElementById("scene").hidden = !!id;
   tabs.hidden = !id;
   main.querySelectorAll(".station").forEach(sec => { sec.hidden = sec.id !== id; });
   tabs.querySelectorAll("a").forEach(a => {
