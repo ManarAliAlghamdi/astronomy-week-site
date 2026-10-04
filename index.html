@@ -267,6 +267,60 @@ STATIONS.forEach(s => {
     }
   }
 
+  function ball(x, y, r, c1, c2){
+    const g = ctx.createRadialGradient(x - r * .4, y - r * .4, r * .1, x, y, r);
+    g.addColorStop(0, c1); g.addColorStop(1, c2);
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
+  }
+  function shade(x, y, r){
+    // night side: darken the lower-right of a planet
+    const g = ctx.createRadialGradient(x - r * .5, y - r * .5, r * .6, x, y, r * 1.05);
+    g.addColorStop(0, "rgba(14,16,51,0)"); g.addColorStop(1, "rgba(14,16,51,.65)");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
+  }
+  function drawPlanets(t){
+    const u = Math.min(w, h), tt = still ? 0 : t / 1000;
+    ctx.save();
+    ctx.globalAlpha *= .8;
+
+    // Saturn, top left, with rings
+    let r = u * .075, x = w * .14, y = h * .16 + Math.sin(tt * .5) * 5;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(-.35);
+    ctx.strokeStyle = "rgba(237,232,218,.55)"; ctx.lineWidth = r * .22;
+    ctx.beginPath(); ctx.ellipse(0, 0, r * 1.9, r * .55, 0, Math.PI, 6.2832); ctx.stroke();
+    ball(0, 0, r, "#F4D9A0", "#B98A4A"); shade(0, 0, r);
+    ctx.beginPath(); ctx.ellipse(0, 0, r * 1.9, r * .55, 0, 0, Math.PI); ctx.stroke();
+    ctx.restore();
+
+    // Jupiter, right side, with bands
+    r = u * .09; x = w * .93; y = h * .42 + Math.sin(tt * .4 + 2) * 6;
+    ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip();
+    ball(x, y, r, "#F0CFA4", "#B97B4E");
+    ["rgba(150,90,60,.45)", "rgba(240,225,200,.35)", "rgba(150,90,60,.5)", "rgba(240,225,200,.3)"].forEach((c, i) => {
+      ctx.fillStyle = c; ctx.fillRect(x - r, y - r * .6 + i * r * .35, r * 2, r * .17);
+    });
+    ctx.fillStyle = "rgba(190,80,60,.7)"; ctx.beginPath(); ctx.ellipse(x - r * .2, y + r * .3, r * .22, r * .12, 0, 0, 6.2832); ctx.fill();
+    shade(x, y, r); ctx.restore();
+
+    // Earth with an orbiting moon, left side
+    r = u * .055; x = w * .1; y = h * .58 + Math.sin(tt * .45 + 4) * 5;
+    ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip();
+    ball(x, y, r, "#7FC4F2", "#1E5FA8");
+    ctx.fillStyle = "rgba(90,170,100,.85)";
+    ctx.beginPath(); ctx.ellipse(x - r * .3, y - r * .2, r * .35, r * .22, .5, 0, 6.2832); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x + r * .35, y + r * .35, r * .3, r * .18, -.4, 0, 6.2832); ctx.fill();
+    shade(x, y, r); ctx.restore();
+    const ma = tt * .6, mx = x + Math.cos(ma) * r * 2.2, my = y + Math.sin(ma) * r * .7;
+    ctx.strokeStyle = "rgba(237,232,218,.15)"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.ellipse(x, y, r * 2.2, r * .7, 0, 0, 6.2832); ctx.stroke();
+    ball(mx, my, r * .22, "#EDE8DA", "#9A98A8");
+
+    // Mars, small, lower middle-left
+    r = u * .032; x = w * .38; y = h * .9 + Math.sin(tt * .6 + 1) * 4;
+    ball(x, y, r, "#F08C5C", "#A83A1E"); shade(x, y, r);
+    ctx.restore();
+  }
+
   function drawBlackHole(dt){
     const {x, y, r} = bh, tilt = .3;
     // glow
@@ -346,6 +400,7 @@ STATIONS.forEach(s => {
     if(still) fade = home ? 1 : 0;
     if(fade > .02){
       ctx.globalAlpha = fade;
+      drawPlanets(t);
       drawBlackHole(still ? 0 : dt);
       if(!still){
         if(home){
