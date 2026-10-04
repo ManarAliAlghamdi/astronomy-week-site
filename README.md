@@ -1,4 +1,4 @@
-# الأسبوع الفلكي
+# أسبوع الفلك
 
 The QR code website for our astronomy week.
 
