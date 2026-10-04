@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>رموز QR للأسبوع الفلكي</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+body{margin:0;font-family:"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif;background:#fff;color:#171A45}
+.page{max-width:900px;margin:0 auto;padding:2rem 1.25rem}
+h1{margin:0 0 .25rem;font-size:1.6rem}
+.note{color:#555;margin:0 0 2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:2rem}
+.code{text-align:center;break-inside:avoid;padding:1rem;border:1px solid #ddd;border-radius:10px}
+.code .qr{display:inline-block;padding:10px;background:#fff}
+.code h2{margin:.75rem 0 .25rem;font-size:1.2rem}
+.code .url{font-size:.75rem;color:#666;word-break:break-all;direction:ltr}
+button{font:inherit;padding:.6rem 1.2rem;border-radius:8px;border:1px solid #171A45;background:#171A45;color:#fff;cursor:pointer;margin-bottom:2rem}
+@media print{button,.note{display:none}.code{border:1px solid #999}}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>رموز QR</h1>
+  <p class="note">هذه الصفحة تصنع الرموز تلقائيًا من رابط الموقع الحالي. افتحها من الموقع المنشور على GitHub ثم اطبعها.</p>
+  <button onclick="window.print()">طباعة الرموز</button>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+(async function(){
+  // the site's base address, whatever GitHub Pages address it is published at
+  const base = location.href.replace(/qr\.html.*$/, "");
+  // read the station list straight from index.html so the codes always match the site
+  let stations = [];
+  try{
+    const src = await (await fetch(base + "index.html")).text();
+    const m = src.match(/const STATIONS = (\[[\s\S]*?\n\]);/);
+    stations = m ? Function("return " + m[1])() : [];
+  }catch(e){}
+  const items = [{title:"الموقع الرئيسي (لمدخل المعرض)", url: base}]
+    .concat(stations.map(s => ({title: s.title, url: base + "#" + s.id})));
+  const grid = document.getElementById("grid");
+  items.forEach(it => {
+    const box = document.createElement("div"); box.className = "code";
+    const q = document.createElement("div"); q.className = "qr"; box.appendChild(q);
+    const h = document.createElement("h2"); h.textContent = it.title; box.appendChild(h);
+    const u = document.createElement("div"); u.className = "url"; u.textContent = it.url; box.appendChild(u);
+    grid.appendChild(box);
+    new QRCode(q, {text: it.url, width: 200, height: 200, colorDark: "#0E1033", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M});
+  });
+})();
+</script>
+</body>
+</html>
