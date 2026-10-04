@@ -30,10 +30,11 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--accretion);outline-offset:3px}
 .display{font-family:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif}
 .wrap{width:100%;max-width:680px;margin:0 auto;padding:0 1.25rem}
-#scene{flex:1 0 auto;width:100%;min-height:260px}
+#sceneTop{flex:0 0 auto;width:100%;height:clamp(170px,26svh,240px)}
+#scene{flex:1 0 auto;width:100%;min-height:240px}
 
 /* hero: the stations as a constellation */
-.hero{padding:1.75rem 1.25rem .5rem;text-align:center}
+.hero{padding:.5rem 1.25rem .5rem;text-align:center}
 .hero h1{margin:0;font-size:clamp(2.2rem,9vw,3.2rem);line-height:1.1;font-weight:700}
 .hero p{margin:.6rem auto 0;color:var(--muted);max-width:28rem}
 .sky{display:block;width:100%;max-width:340px;height:auto;margin:.75rem auto 0;overflow:visible}
@@ -134,6 +135,8 @@ const STATIONS = [
   }
 ];
 </script>
+
+<div id="sceneTop" aria-hidden="true"></div>
 
 <header class="hero wrap">
   <h1 class="display" id="eventTitle"></h1>
@@ -239,9 +242,9 @@ STATIONS.forEach(s => {
   const ctx = cv.getContext("2d");
   if(!ctx) return;
   const still = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
-  const heroEl = document.querySelector(".hero"), zoneEl = document.getElementById("scene");
+  const heroEl = document.querySelector(".hero"), zones = [{el:document.getElementById("sceneTop"), kind:"top"}, {el:document.getElementById("scene"), kind:"bottom"}].map(z => Object.assign(z, {things:[], nextComet:1, nextSat:5, nextProbe:9, seeded:false}));
   let stars = [], w = 0, h = 0, zw = 0, zh = 0;
-  let bits = [], things = [], nextComet = 1, nextSat = 4, nextProbe = 9, fade = 0, last = 0, seeded = false;
+  let bits = [], cz = null, fade = 0, last = 0;
   const rand = (a, b) => a + Math.random() * (b - a);
   for(let i = 0; i < 46; i++) bits.push({a:Math.random()*6.28, d:rand(1.3, 4.2), s:rand(.7, 1.3)});
 
@@ -280,28 +283,28 @@ STATIONS.forEach(s => {
   }
 
   // all scene coordinates are local to the zone: (0,0) top-left, zw x zh
-  function drawPlanets(t){
-    const u = Math.min(zw * .5, zh), tt = still ? 0 : t / 1000;
+  function drawPlanets(t, kind){
+    const T = kind === "top", u = Math.min(zw * .5, zh) * (T ? 1.3 : 1), tt = still ? 0 : t / 1000;
     let r, x, y;
-    // Saturn
-    r = u * .1; x = zw * .2; y = zh * .27 + Math.sin(tt * .5) * 4;
+    if(T){ // Saturn
+    r = u * .1; x = zw * .2; y = zh * .5 + Math.sin(tt * .5) * 4;
     ctx.save(); ctx.translate(x, y); ctx.rotate(-.35);
     ctx.strokeStyle = "rgba(237,232,218,.55)"; ctx.lineWidth = r * .22;
     ctx.beginPath(); ctx.ellipse(0, 0, r * 1.9, r * .55, 0, Math.PI, 6.2832); ctx.stroke();
     ball(0, 0, r, "#F4D9A0", "#B98A4A"); shade(0, 0, r);
     ctx.beginPath(); ctx.ellipse(0, 0, r * 1.9, r * .55, 0, 0, Math.PI); ctx.stroke();
-    ctx.restore();
-    // Jupiter
-    r = u * .12; x = zw * .58; y = zh * .24 + Math.sin(tt * .4 + 2) * 5;
+    ctx.restore(); }
+    if(!T){ // Jupiter
+    r = u * .12; x = zw * .3; y = zh * .3 + Math.sin(tt * .4 + 2) * 5;
     ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip();
     ball(x, y, r, "#F0CFA4", "#B97B4E");
     ["rgba(150,90,60,.45)", "rgba(240,225,200,.35)", "rgba(150,90,60,.5)", "rgba(240,225,200,.3)"].forEach((c, i) => {
       ctx.fillStyle = c; ctx.fillRect(x - r, y - r * .6 + i * r * .35, r * 2, r * .17);
     });
     ctx.fillStyle = "rgba(190,80,60,.7)"; ctx.beginPath(); ctx.ellipse(x - r * .2, y + r * .3, r * .22, r * .12, 0, 0, 6.2832); ctx.fill();
-    shade(x, y, r); ctx.restore();
-    // Earth + moon
-    r = u * .07; x = zw * .22; y = zh * .74 + Math.sin(tt * .45 + 4) * 4;
+    shade(x, y, r); ctx.restore(); }
+    if(T){ // Earth + moon
+    r = u * .07; x = zw * .8; y = zh * .5 + Math.sin(tt * .45 + 4) * 4;
     ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.clip();
     ball(x, y, r, "#7FC4F2", "#1E5FA8");
     ctx.fillStyle = "rgba(90,170,100,.85)";
@@ -311,10 +314,10 @@ STATIONS.forEach(s => {
     const ma = tt * .6, mx = x + Math.cos(ma) * r * 2.2, my = y + Math.sin(ma) * r * .7;
     ctx.strokeStyle = "rgba(237,232,218,.15)"; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.ellipse(x, y, r * 2.2, r * .7, 0, 0, 6.2832); ctx.stroke();
-    ball(mx, my, r * .22, "#EDE8DA", "#9A98A8");
-    // Mars
+    ball(mx, my, r * .22, "#EDE8DA", "#9A98A8"); }
+    if(!T){ // Mars
     r = u * .04; x = zw * .5; y = zh * .8 + Math.sin(tt * .6 + 1) * 3;
-    ball(x, y, r, "#F08C5C", "#A83A1E"); shade(x, y, r);
+    ball(x, y, r, "#F08C5C", "#A83A1E"); shade(x, y, r); }
   }
 
   function drawBlackHole(dt){
@@ -342,12 +345,12 @@ STATIONS.forEach(s => {
   function spawn(kind){
     if(kind === "comet"){
       const s = rand(200, 320);
-      things.push({k:"comet", x:rand(zw * .3, zw + 60), y:-30, vx:-s * .8, vy:s * .6, len:rand(60, 110)});
+      cz.things.push({k:"comet", x:rand(zw * .3, zw + 60), y:-30, vx:-s * .8, vy:s * .6, len:rand(60, 110)});
     }else if(kind === "sat"){
       const left = Math.random() < .5;
-      things.push({k:"sat", x:left ? -30 : zw + 30, y:rand(zh * .1, zh * .45), vx:(left ? 1 : -1) * rand(35, 55), vy:rand(-4, 8), t:0});
+      cz.things.push({k:"sat", x:left ? -30 : zw + 30, y:rand(zh * .1, zh * .45), vx:(left ? 1 : -1) * rand(35, 55), vy:rand(-4, 8), t:0});
     }else{
-      things.push({k:"probe", x:zw + 40, y:rand(zh * .45, zh * .65), vx:-rand(14, 22), vy:rand(-3, 3), t:0});
+      cz.things.push({k:"probe", x:zw + 40, y:rand(zh * .45, zh * .65), vx:-rand(14, 22), vy:rand(-3, 3), t:0});
     }
   }
 
@@ -389,29 +392,36 @@ STATIONS.forEach(s => {
     last = t;
     ctx.clearRect(0, 0, w, h);
     drawStars(t);
-    const home = !heroEl.hidden, rc = zoneEl.getBoundingClientRect();
-    zw = rc.width; zh = rc.height;
+    const home = !heroEl.hidden;
     fade += ((home ? 1 : 0) - fade) * Math.min(1, dt * 4);
     if(still) fade = home ? 1 : 0;
-    if(fade > .02 && zh > 40){
-      if(!seeded && !still){ seeded = true; spawn("comet"); spawn("sat"); things[1].x = zw * .5; }
-      ctx.save();
-      ctx.beginPath(); ctx.rect(rc.left, rc.top, zw, zh); ctx.clip();   // nothing is drawn outside the zone
-      ctx.translate(rc.left, rc.top);
-      ctx.globalAlpha = fade;
-      drawPlanets(t);
-      drawBlackHole(still ? 0 : dt);
-      if(!still){
-        if(home){
-          nextComet -= dt; nextSat -= dt; nextProbe -= dt;
-          if(nextComet < 0){ spawn("comet"); nextComet = rand(1.8, 4.5); }
-          if(nextSat < 0){ spawn("sat"); nextSat = rand(12, 20); }
-          if(nextProbe < 0){ spawn("probe"); nextProbe = rand(25, 40); }
+    if(fade > .02){
+      for(const z of zones){
+        const rc = z.el.getBoundingClientRect();
+        zw = rc.width; zh = rc.height; cz = z;
+        if(zh < 40) continue;
+        if(!z.seeded && !still){
+          z.seeded = true; spawn("comet");
+          if(z.kind === "top"){ spawn("sat"); z.things[1].x = zw * .5; }
         }
-        things = things.filter(o => drawThing(o, dt));
+        ctx.save();
+        ctx.beginPath(); ctx.rect(rc.left, rc.top, zw, zh); ctx.clip();   // nothing is drawn outside the zones
+        ctx.translate(rc.left, rc.top);
+        ctx.globalAlpha = fade;
+        drawPlanets(t, z.kind);
+        if(z.kind === "bottom") drawBlackHole(still ? 0 : dt);
+        if(!still){
+          if(home){
+            z.nextComet -= dt; z.nextSat -= dt; z.nextProbe -= dt;
+            if(z.nextComet < 0){ spawn("comet"); z.nextComet = z.kind === "top" ? rand(1.8, 4) : rand(4, 8); }
+            if(z.kind === "top" && z.nextSat < 0){ spawn("sat"); z.nextSat = rand(12, 20); }
+            if(z.kind === "bottom" && z.nextProbe < 0){ spawn("probe"); z.nextProbe = rand(25, 40); }
+          }
+          z.things = z.things.filter(o => drawThing(o, dt));
+        }
+        ctx.restore();
       }
-      ctx.restore();
-    }else if(!home){ things = []; }
+    }else if(!home){ zones.forEach(z => { z.things = []; }); }
     if(!still) requestAnimationFrame(frame);
   }
 
@@ -440,6 +450,7 @@ function route(){
   if(!known) id = "";
   hero.hidden = !!id;
   document.getElementById("scene").hidden = !!id;
+  document.getElementById("sceneTop").hidden = !!id;
   tabs.hidden = !id;
   main.querySelectorAll(".station").forEach(sec => { sec.hidden = sec.id !== id; });
   tabs.querySelectorAll("a").forEach(a => {
