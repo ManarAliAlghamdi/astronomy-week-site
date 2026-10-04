@@ -30,19 +30,22 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--accretion);outline-offset:3px}
 .display{font-family:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif}
 .wrap{width:100%;max-width:680px;margin:0 auto;padding:0 1.25rem}
-#sceneTop{flex:0 0 auto;width:100%;height:clamp(170px,26svh,240px)}
-#scene{flex:1 0 auto;width:100%;min-height:240px}
+#sceneTop{flex:2 1 0;width:100%;min-height:0}
+#scene{flex:3 1 0;width:100%;min-height:0}
+/* home page fits the screen exactly: no scrolling */
+html.home,html.home body{height:100vh;height:100svh;overflow:hidden}
+html.home footer{display:none}
 
 /* hero: the stations as a constellation */
 .hero{padding:.5rem 1.25rem .5rem;text-align:center}
 .hero h1{margin:0;font-size:clamp(2.2rem,9vw,3.2rem);line-height:1.1;font-weight:700}
 .hero p{margin:.6rem auto 0;color:var(--muted);max-width:28rem}
-.sky{display:block;width:100%;max-width:340px;height:auto;margin:.75rem auto 0;overflow:visible}
+.sky{display:block;width:auto;max-width:100%;height:min(46vh,440px);height:min(46svh,440px);margin:.5rem auto 0;overflow:visible}
 .sky .link{stroke:var(--star);stroke-opacity:.4;stroke-width:1.5;fill:none}
 .sky a{cursor:pointer;text-decoration:none}
 .sky .halo{fill:var(--accretion);opacity:.22}
 .sky .core{fill:var(--star)}
-.sky text{fill:var(--star);font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:16px;font-weight:600}
+.sky text{fill:var(--star);font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:19px;font-weight:600}
 .sky a:hover .halo,.sky a:focus-visible .halo{opacity:.4}
 .sky .bg{fill:var(--star)}
 .hint{color:var(--muted);font-size:.9rem;margin:0}
@@ -189,7 +192,7 @@ STATIONS.forEach((s, i) => {
   a.style.setProperty("--d", (0.2 + i*0.25) + "s");
   el("title", {}, a).textContent = s.title;
   el("circle", {class:"halo", cx:s.x, cy:s.y, r:22}, a);
-  el("circle", {class:"core", cx:s.x, cy:s.y, r:6}, a);
+  el("circle", {class:"core", cx:s.x, cy:s.y, r:7}, a);
   // keep labels inside the frame: put them below stars near the top, above otherwise
   const below = s.y < 100;
   const t = el("text", {x:s.x, y:s.y + (below ? 38 : -30), "text-anchor":"middle"}, a);
@@ -284,7 +287,7 @@ STATIONS.forEach(s => {
 
   // all scene coordinates are local to the zone: (0,0) top-left, zw x zh
   function drawPlanets(t, kind){
-    const T = kind === "top", u = Math.min(zw * .5, zh) * (T ? 1.3 : 1), tt = still ? 0 : t / 1000;
+    const T = kind === "top", u = Math.min(zw * .5, zh) * (T ? 1.6 : 1), tt = still ? 0 : t / 1000;
     let r, x, y;
     if(T){ // Saturn
     r = u * .1; x = zw * .2; y = zh * .5 + Math.sin(tt * .5) * 4;
@@ -449,6 +452,7 @@ function route(){
   const known = STATIONS.some(s => s.id === id);
   if(!known) id = "";
   hero.hidden = !!id;
+  document.documentElement.classList.toggle("home", !id);
   document.getElementById("scene").hidden = !!id;
   document.getElementById("sceneTop").hidden = !!id;
   tabs.hidden = !id;
