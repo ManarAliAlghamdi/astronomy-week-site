@@ -36,7 +36,7 @@ a{color:inherit}
 .hero{padding:1.75rem 1.25rem .5rem;text-align:center}
 .hero h1{margin:0;font-size:clamp(2.2rem,9vw,3.2rem);line-height:1.1;font-weight:700}
 .hero p{margin:.6rem auto 0;color:var(--muted);max-width:28rem}
-.sky{display:block;width:100%;max-width:320px;height:auto;margin:.75rem auto 0;overflow:visible}
+.sky{display:block;width:100%;max-width:340px;height:auto;margin:.75rem auto 0;overflow:visible}
 .sky .link{stroke:var(--star);stroke-opacity:.4;stroke-width:1.5;fill:none}
 .sky a{cursor:pointer;text-decoration:none}
 .sky .halo{fill:var(--accretion);opacity:.22}
@@ -95,7 +95,7 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;text-align:center;
    Each station needs: id (used in the link, English, no spaces), title,
    by (presenters), body, emblem (time | voyager | vr | blackhole).
    Optional: fact, image ("images/file.jpg"), link { label, href }.
-   x, y place the star in the top constellation (0-360 across, 0-320 down).
+   x, y place the star in the top constellation (0-360 across, 0-420 down).
    ===================================================================== */
 const EVENT = {
   title: "أسبوع الفلك",
@@ -105,27 +105,27 @@ const EVENT = {
 
 const STATIONS = [
   {
-    id: "time-travel", emblem: "time", x: 80, y: 62,
+    id: "time-travel", emblem: "time", x: 85, y: 55,
     title: "السفر عبر الزمن",
     by: "تولين",
     body: "هل يمكن أن يمر الزمن عند شخص أبطأ منه عند غيره؟ تقول النسبية الخاصة إنه كلما زادت سرعة الجسم تباطأ الزمن عنده، وتقول النسبية العامة إن الزمن يتباطأ أيضًا قرب الكتل الضخمة، وهنا يظهر دور الثقوب السوداء.",
     fact: "ساعات أقمار نظام GPS تتقدم نحو ٣٨ ميكروثانية كل يوم مقارنة بساعات الأرض، ولو لم يصحّحها العلماء لأخطأت الخرائط بعدة كيلومترات يوميًا."
   },
   {
-    id: "voyager", emblem: "voyager", x: 262, y: 44,
+    id: "voyager", emblem: "voyager", x: 272, y: 150,
     title: "مركبة فوياجر",
     by: "جوري وسارة وجود",
     body: "غادرت مركبة فوياجر الأرض عام ١٩٧٧ ولم تعد أبدًا. نعرض الصور التي التقطتها خلال رحلتها بين الكواكب، ونشرح كيف تصل معلوماتها إلينا من أبعد نقطة وصل إليها جسم صنعه الإنسان.",
     fact: "إشارة فوياجر ١ تحتاج اليوم نحو ٢٣ ساعة لتصل إلى الأرض، رغم أنها تسير بسرعة الضوء."
   },
   {
-    id: "vr", emblem: "vr", x: 280, y: 170,
+    id: "vr", emblem: "vr", x: 90, y: 255,
     title: "الفلك بالواقع الافتراضي",
     by: "فاطمة",
     body: "محطة تفاعلية تحوّل ما نتعلمه عن الفلك إلى تجربة تعيشها بنفسك. ارتدِ النظارة وتجوّل في الفضاء عن قرب."
   },
   {
-    id: "black-holes", emblem: "blackhole", x: 125, y: 255,
+    id: "black-holes", emblem: "blackhole", x: 265, y: 360,
     title: "الثقوب السوداء",
     by: "منار",
     body: "الثقب الأسود ليس فراغًا، بل كمية هائلة من المادة مضغوطة في مساحة صغيرة جدًا، جاذبيتها قوية لدرجة أن الضوء نفسه لا يستطيع الهروب منها. نشرح كيف تتكون، ونعرض أول صورة حقيقية التُقطت لثقب أسود.",
@@ -138,7 +138,7 @@ const STATIONS = [
 <header class="hero wrap">
   <h1 class="display" id="eventTitle"></h1>
   <p id="eventIntro"></p>
-  <svg class="sky" id="sky" viewBox="0 0 360 320" role="navigation" aria-label="أركان المعرض"></svg>
+  <svg class="sky" id="sky" viewBox="0 0 360 420" role="navigation" aria-label="أركان المعرض"></svg>
 </header>
 
 <div id="scene" aria-hidden="true"></div>
@@ -171,7 +171,7 @@ const sky = document.getElementById("sky");
 let seed = 7;
 const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
 for(let i = 0; i < 70; i++){
-  el("circle", {class:"bg", cx:(rnd()*320).toFixed(1), cy:(rnd()*360).toFixed(1), r:(rnd()*1.1 + .3).toFixed(2), opacity:(rnd()*.5 + .15).toFixed(2)}, sky);
+  el("circle", {class:"bg", cx:(rnd()*420).toFixed(1), cy:(rnd()*360).toFixed(1), r:(rnd()*1.1 + .3).toFixed(2), opacity:(rnd()*.5 + .15).toFixed(2)}, sky);
 }
 // lines join the stations in order, closing the shape
 const pts = STATIONS.map(s => [s.x, s.y]);
