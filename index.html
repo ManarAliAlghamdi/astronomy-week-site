@@ -71,6 +71,9 @@ html.home footer{display:none}
   background:var(--accretion);color:#1B1030;font-weight:600;text-decoration:none;min-height:48px;
 }
 .cta:hover{filter:brightness(1.06)}
+.actions{display:flex;flex-wrap:wrap;gap:.7rem}
+.cta.alt{background:transparent;color:var(--star);border:1.5px solid var(--accretion)}
+.cta.alt:hover{background:var(--deep);filter:none}
 .top{display:inline-block;margin-top:1.5rem;color:var(--muted);font-size:.9rem}
 
 /* starfield behind the whole page */
@@ -98,7 +101,10 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;text-align:center;
    EDIT THE CONTENT HERE
    Each station needs: id (used in the link, English, no spaces), title,
    by (presenters), body, emblem (time | voyager | vr | blackhole).
-   Optional: fact, image ("images/file.jpg"), link { label, href }.
+   Optional: fact, image ("images/file.jpg"), link { label, href },
+   or links [{ label, href }, ...] for several buttons (first is filled, rest outlined).
+   page: "folder/" makes the star and tab open that separate page instead of a section here
+   (then only id, title, x, y are needed).
    x, y place the star in the top constellation (0-360 across, 0-420 down).
    ===================================================================== */
 const EVENT = {
@@ -109,32 +115,32 @@ const EVENT = {
 
 const STATIONS = [
   {
-    id: "time-travel", emblem: "time", x: 85, y: 55,
+    id: "time-travel", emblem: "time", x: 85, y: 50,
     title: "السفر عبر الزمن",
     by: "تولين",
     body: "هل يمكن أن يمر الزمن عند شخص أبطأ منه عند غيره؟ تقول النسبية الخاصة إنه كلما زادت سرعة الجسم تباطأ الزمن عنده، وتقول النسبية العامة إن الزمن يتباطأ أيضًا قرب الكتل الضخمة، وهنا يظهر دور الثقوب السوداء.",
     fact: "ساعات أقمار نظام GPS تتقدم نحو ٣٨ ميكروثانية كل يوم مقارنة بساعات الأرض، ولو لم يصحّحها العلماء لأخطأت الخرائط بعدة كيلومترات يوميًا."
   },
   {
-    id: "voyager", emblem: "voyager", x: 272, y: 150,
+    id: "voyager", emblem: "voyager", x: 272, y: 120,
     title: "مركبة فوياجر",
     by: "جوري وسارة وجود",
     body: "غادرت مركبة فوياجر الأرض عام ١٩٧٧ ولم تعد أبدًا. نعرض الصور التي التقطتها خلال رحلتها بين الكواكب، ونشرح كيف تصل معلوماتها إلينا من أبعد نقطة وصل إليها جسم صنعه الإنسان.",
     fact: "إشارة فوياجر ١ تحتاج اليوم نحو ٢٣ ساعة لتصل إلى الأرض، رغم أنها تسير بسرعة الضوء."
   },
   {
-    id: "vr", emblem: "vr", x: 90, y: 255,
+    id: "vr", emblem: "vr", x: 90, y: 200,
     title: "الفلك بالواقع الافتراضي",
     by: "فاطمة",
     body: "محطة تفاعلية تحوّل ما نتعلمه عن الفلك إلى تجربة تعيشها بنفسك. ارتدِ النظارة وتجوّل في الفضاء عن قرب."
   },
   {
-    id: "black-holes", emblem: "blackhole", x: 265, y: 360,
-    title: "الثقوب السوداء",
-    by: "منار",
-    body: "الثقب الأسود ليس فراغًا، بل كمية هائلة من المادة مضغوطة في مساحة صغيرة جدًا، جاذبيتها قوية لدرجة أن الضوء نفسه لا يستطيع الهروب منها. نشرح كيف تتكون، ونعرض أول صورة حقيقية التُقطت لثقب أسود.",
-    fact: "لو ضُغطت الأرض لتصبح ثقبًا أسود، لكان حجمها بحجم حبة عنب فقط.",
-    link: { label: "استمع لأصوات الفضاء", href: "sounds/" }
+    id: "black-holes", page: "black-holes/", x: 265, y: 275,
+    title: "الثقوب السوداء"
+  },
+  {
+    id: "sounds", page: "sounds/", x: 110, y: 355,
+    title: "أصوات الفضاء"
   }
 ];
 </script>
@@ -188,7 +194,7 @@ if(pts.length > 1){
   path.style.setProperty("--len", len);
 }
 STATIONS.forEach((s, i) => {
-  const a = el("a", {href:"#" + s.id, class:"star"}, sky);
+  const a = el("a", {href:s.page || "#" + s.id, class:"star"}, sky);
   a.style.setProperty("--d", (0.2 + i*0.25) + "s");
   el("title", {}, a).textContent = s.title;
   el("circle", {class:"halo", cx:s.x, cy:s.y, r:22}, a);
@@ -215,7 +221,7 @@ const EMBLEMS = {
 
 /* ---- stations ---- */
 const main = document.getElementById("stations");
-STATIONS.forEach(s => {
+STATIONS.filter(s => !s.page).forEach(s => {
   const sec = document.createElement("section");
   sec.className = "station"; sec.id = s.id;
   sec.setAttribute("aria-labelledby", s.id + "-title");
@@ -225,7 +231,8 @@ STATIONS.forEach(s => {
   if(s.image) html += '<img class="photo" alt="">';
   html += '<p class="body"></p>';
   if(s.fact) html += '<p class="fact"><strong>هل تعلم؟</strong><span></span></p>';
-  if(s.link) html += '<a class="cta"></a>';
+  const btns = s.links || (s.link ? [s.link] : []);
+  if(btns.length) html += '<div class="actions">' + btns.map(() => '<a class="cta"></a>').join("") + '</div>';
   html += '<a class="top" href="#">العودة إلى الرئيسية</a>';
   sec.innerHTML = html;
   sec.querySelector("h2").textContent = s.title;
@@ -233,7 +240,10 @@ STATIONS.forEach(s => {
   sec.querySelector(".body").textContent = s.body;
   if(s.image){ const img = sec.querySelector(".photo"); img.src = s.image; img.alt = s.title; img.loading = "lazy"; }
   if(s.fact) sec.querySelector(".fact span").textContent = s.fact;
-  if(s.link){ const a = sec.querySelector(".cta"); a.href = s.link.href; a.textContent = s.link.label; }
+  sec.querySelectorAll(".cta").forEach((a, i) => {
+    a.href = btns[i].href; a.textContent = btns[i].label;
+    if(i) a.classList.add("alt");
+  });
   main.appendChild(sec);
 });
 
@@ -442,14 +452,16 @@ home.href = "#"; home.textContent = "الرئيسية";
 tabs.appendChild(home);
 STATIONS.forEach(s => {
   const a = document.createElement("a");
-  a.href = "#" + s.id; a.dataset.id = s.id; a.textContent = s.title;
+  a.href = s.page || "#" + s.id; a.dataset.id = s.id; a.textContent = s.title;
   tabs.appendChild(a);
 });
 
 function route(){
   let id = "";
   try{ id = decodeURIComponent(location.hash.slice(1)); }catch(e){}
-  const known = STATIONS.some(s => s.id === id);
+  const st = STATIONS.find(s => s.id === id);
+  if(st && st.page){ location.replace(st.page); return; }   // old links like #black-holes
+  const known = !!st;
   if(!known) id = "";
   hero.hidden = !!id;
   document.documentElement.classList.toggle("home", !id);

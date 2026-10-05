@@ -38,7 +38,7 @@ button{font:inherit;padding:.6rem 1.2rem;border-radius:8px;border:1px solid #171
     stations = m ? Function("return " + m[1])() : [];
   }catch(e){}
   const items = [{title:"الموقع الرئيسي (لمدخل المعرض)", url: base}]
-    .concat(stations.map(s => ({title: s.title, url: base + "#" + s.id})));
+    .concat(stations.map(s => ({title: s.title, url: base + (s.page || "#" + s.id)})));
   const grid = document.getElementById("grid");
   items.forEach(it => {
     const box = document.createElement("div"); box.className = "code";
