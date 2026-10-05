@@ -4,6 +4,7 @@ The QR code website for our astronomy week.
 
 ## Files
 - `index.html`: the main page with all stations. Edit the `STATIONS` list at the top to change any text.
+- `time-travel/`: the full time travel page (the time travel tab opens it).
 - `black-holes/`: the full black holes page with the quiz (the black holes tab opens it).
 - `sounds/`: the space sounds page (its own tab on the main page).
 - `qr.html`: makes the QR codes automatically. Open it from the live site, then print.
