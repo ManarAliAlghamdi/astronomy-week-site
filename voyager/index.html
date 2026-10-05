@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مركبة فويجر</title>
+<meta name="theme-color" content="#0E1033">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0E1033; --deep:#171A45; --line:#2C3068; --star:#EDE8DA; --muted:#A3A5CB;
+  --accretion:#FFB35C; --plasma:#9FD8F0;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 1rem)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  display:flex;flex-direction:column;min-height:100vh;min-height:100svh;
+  margin:0;background:var(--night);color:var(--star);
+  font-family:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",Arial,sans-serif;
+  font-size:1.0625rem;line-height:1.8;overflow-x:hidden;
+}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accretion);outline-offset:3px}
+.display{font-family:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif}
+.wrap{width:100%;max-width:680px;margin:0 auto;padding:0 1.25rem}
+#starfield{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+[hidden]{display:none!important}
+
+.back{display:inline-flex;align-items:center;min-height:44px;margin-top:1rem;color:var(--muted);font-size:.95rem;text-decoration:none}
+.back:hover{color:var(--star)}
+
+.hero{padding:2.5rem 0 1.5rem;text-align:center}
+.hero svg{width:72px;height:72px;display:block;margin:0 auto 1rem}
+.hero h1{margin:0;font-size:clamp(2.6rem,12vw,3.8rem);line-height:1.1;font-weight:700}
+.hero p{margin:.8rem auto 0;color:var(--muted);max-width:28rem}
+
+section.block{padding:2.5rem 0;border-top:1px solid var(--line)}
+.eyebrow{margin:0 0 .4rem;color:var(--accretion);font-weight:600;font-size:.95rem}
+section.block h2{margin:0 0 1rem;font-size:clamp(1.7rem,6.5vw,2.2rem);line-height:1.3;font-weight:700}
+section.block h3{margin:0 0 .75rem;font-size:clamp(1.3rem,5vw,1.6rem);line-height:1.4;font-weight:700}
+p{margin:0 0 1.25rem}
+
+.points{list-style:none;margin:0 0 1.5rem;padding:0;display:grid;gap:.75rem}
+.points li{padding:.9rem 1.1rem;background:var(--deep);border-inline-start:3px solid var(--accretion);border-radius:0 8px 8px 0}
+.points strong{display:block;color:var(--accretion);font-weight:600;font-size:.95rem}
+
+.figure{margin:0 0 1.5rem;padding:1rem .75rem .75rem;background:var(--deep);border-radius:10px}
+.figure img{display:block;width:100%;height:auto}
+.labels{display:grid;grid-template-columns:1fr 1fr;direction:ltr;margin-top:-6%;position:relative;text-align:center;font-size:.92rem;line-height:1.5}
+.labels span{direction:rtl;padding:0 .25rem}
+.labels span:first-child{color:var(--accretion)}
+.labels span:last-child{color:var(--plasma)}
+
+.stat{margin:0 0 1.25rem;padding:1rem 1.1rem;background:var(--deep);border-radius:10px;text-align:center}
+.stat b{display:block;font-family:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:clamp(2rem,9vw,2.8rem);line-height:1.2;color:var(--accretion);font-weight:700}
+.stat span{display:block;color:var(--muted);font-size:.95rem;line-height:1.6}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin:0 0 1.25rem}
+.stats .stat{margin:0;padding:.8rem .4rem}
+.stats .stat b{font-size:clamp(1.3rem,6vw,2rem)}
+.stats .stat span{font-size:.82rem}
+
+/* formation timeline */
+.steps{list-style:none;margin:0 0 1.25rem;padding:0;position:relative}
+.steps li{position:relative;padding:0 3.4rem 1.5rem 0;min-height:2.6rem}
+.steps li:last-child{padding-bottom:0}
+.steps li::before{content:"";position:absolute;top:2.6rem;bottom:0;right:1.15rem;width:2px;background:var(--line)}
+.steps li:last-child::before{display:none}
+.steps .num{position:absolute;top:0;right:0;width:2.4rem;height:2.4rem;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--night);border:2px solid var(--accretion);color:var(--accretion);font-weight:600;font-family:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif}
+.steps li:last-child .num{background:var(--accretion);color:#1B1030}
+.steps strong{display:block;font-weight:600;line-height:1.5;padding-top:.2rem}
+.steps span.d{display:block;color:var(--muted);font-size:.97rem;line-height:1.7}
+.note{color:var(--muted);font-size:.95rem}
+
+.photo{display:block;width:100%;height:auto;border-radius:10px;margin:0 0 .5rem;background:var(--deep)}
+.credit{margin:0 0 1.25rem;color:var(--muted);font-size:.85rem}
+.tag{display:inline-block;margin:0 0 .75rem;padding:.1rem .8rem;border:1px solid var(--plasma);border-radius:999px;color:var(--plasma);font-size:.88rem;font-weight:500}
+
+/* quiz */
+.q{margin:0 0 1.25rem;padding:1.1rem;background:var(--deep);border-radius:10px;border:0;min-width:0}
+.q legend{padding:0;float:right;width:100%;margin:0 0 .9rem;font-weight:600;line-height:1.6}
+.q .opts{clear:both;display:flex;flex-wrap:wrap;gap:.6rem}
+.opt{
+  font:inherit;font-weight:500;color:var(--star);background:transparent;cursor:pointer;
+  min-height:48px;padding:.5rem 1.3rem;border-radius:999px;border:1.5px solid var(--line);
+  flex:1 1 auto;transition:opacity .2s,background-color .2s;
+}
+.opt:hover:not(:disabled){border-color:var(--accretion)}
+.opt:disabled{cursor:default}
+.opt.correct{background:var(--accretion);border-color:var(--accretion);color:#1B1030;font-weight:600}
+.opt.dim{opacity:.4}
+.opt.picked.dim{opacity:.55;text-decoration:line-through}
+.result{margin:.9rem 0 0;font-weight:600;min-height:0}
+.result.ok{color:var(--accretion)}
+.result.no{color:var(--plasma)}
+.explain{margin:.4rem 0 0;color:var(--muted);font-size:.97rem}
+.retry{
+  font:inherit;font-size:.88rem;margin-top:.8rem;min-height:40px;padding:0 1rem;border-radius:999px;
+  background:transparent;color:var(--muted);border:1px solid var(--line);cursor:pointer;
+}
+.retry:hover{color:var(--star);border-color:var(--muted)}
+.score{margin:0;padding:.9rem 1.1rem;border-radius:10px;border:1px solid var(--accretion);text-align:center;font-weight:600;color:var(--accretion)}
+
+.cta{
+  display:inline-flex;align-items:center;gap:.6rem;padding:.8rem 1.4rem;border-radius:999px;
+  background:var(--accretion);color:#1B1030;font-weight:600;text-decoration:none;min-height:48px;
+}
+.cta:hover{filter:brightness(1.06)}
+.ending{text-align:center}
+
+footer{margin-top:auto;padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;text-align:center;border-top:1px solid var(--line)}
+@media (prefers-reduced-motion:reduce){.opt{transition:none}}
+.fact{margin:0 0 1.25rem;padding:.9rem 1.1rem;border-inline-start:3px solid var(--accretion);background:var(--deep);border-radius:0 8px 8px 0}
+.fact strong{display:block;color:var(--accretion);font-weight:600;font-size:.95rem}
+.cta.alt{background:transparent;color:var(--star);border:1.5px solid var(--accretion)}
+.actions{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center}
+.figure{margin:0 0 1.5rem;padding:1rem .75rem .75rem;background:var(--deep);border-radius:10px}
+.figure img{display:block;width:100%;height:auto}
+.labels{display:grid;grid-template-columns:1fr 1fr;direction:ltr;margin-top:-6%;position:relative;text-align:center;font-size:.92rem;line-height:1.5}
+.labels span{direction:rtl;padding:0 .25rem}
+.labels span:first-child{color:var(--accretion)}
+.labels span:last-child{color:var(--plasma)}
+.calc{margin:0 0 1.25rem;padding:1.1rem;background:var(--deep);border-radius:10px;border:0;min-width:0}
+.calc legend{padding:0;float:right;width:100%;margin:0 0 .9rem;font-weight:600;line-height:1.6}
+.calc .row{clear:both;margin:0 0 1rem}
+.calc label{display:flex;justify-content:space-between;gap:1rem;margin-bottom:.2rem;font-size:.97rem}
+.calc label b{color:var(--accretion);font-weight:600}
+.calc input[type=range]{width:100%;min-height:44px;accent-color:var(--accretion);background:transparent;margin:0}
+.calc .out{margin:0;padding:.9rem 1rem;border-radius:8px;border:1px solid var(--accretion);text-align:center}
+.calc .out b{display:block;font-size:clamp(1.8rem,8vw,2.4rem);line-height:1.3;color:var(--accretion);font-weight:700}
+.cap{margin:0 0 1.25rem;color:var(--muted);font-size:.85rem}
+.credit{color:var(--muted);font-size:.9rem;text-align:center;margin:0}
+
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="../">العودة إلى الأسبوع الفلكي</a>
+</div>
+
+<main class="wrap">
+
+  <header class="hero">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 26a18 9 0 0 0 36 0z" fill="none" stroke="#EDE8DA" stroke-width="2"/><path d="M32 35v10M24 45h16" stroke="#EDE8DA" stroke-width="2" stroke-linecap="round"/><path d="M40 45l18 12" stroke="#9FD8F0" stroke-width="1.5" stroke-linecap="round"/><circle cx="32" cy="18" r="2.5" fill="#FFB35C"/></svg>
+    <h1 class="display">مركبة فويجر</h1>
+    <p>أبعد جسم صنعه الإنسان</p>
+  </header>
+
+  <section class="block" aria-labelledby="intro-h">
+    <p class="eyebrow">تعريف بالمركبة</p>
+    <h2 class="display" id="intro-h">كيف بدأت أعظم رحلة استكشاف بشرية؟</h2>
+    <p>فويجر (Voyager) مسبار فضائي آلي أطلقته وكالة ناسا عام ١٩٧٧ في مهمة بدأت باستكشاف الكواكب الخارجية (المشتري وزحل)، وتحول اليوم إلى أبعد جِسم ومقذوف من صنع البشر في تاريخ الكون.</p>
+    <h3 class="display">ماذا وجد هذا المختبر الفيزيائي في ظلام الكون؟</h3>
+    <p>إنها ليست مجرد آلة، بل هي مختبر فيزيائي طائر وسفيرنا السابح في الظلام السحيق، يعمل بكفاءة منذ نصف قرن متحديًا الزمن والمسافات؛ فحين تخطى المسبار حدود الغلاف الشمسي (Heliosphere) ليدخل رسميًا في الوسط النجمي (Interstellar Space) عام ٢٠١٢، بدأ في رسم خريطة للكون الذي لم نصله بعد.</p>
+    <h3 class="display">كيف نتواصل مع مسبار يبتعد عنا مليارات الكيلومترات؟</h3>
+    <p>تبتعد فويجر عنا الآن مسافة تتخطى ٢٥ مليار كيلومتر عن الأرض وتتحرك بسرعة تقارب ٦١٬٠٠٠ كم/ساعة، مرسلة إلينا بيانات فيزيائية حية من أعمق نقاط الفضاء عبر إشارات لاسلكية خافتة تستغرق نحو يوم كامل لتصل إلينا.</p>
+    <div class="stats">
+      <p class="stat"><b>١٩٧٧</b><span>سنة الإطلاق</span></p>
+      <p class="stat"><b>٢٥ مليار</b><span>كيلومتر عن الأرض</span></p>
+      <p class="stat"><b>٦١٬٠٠٠</b><span>كم في الساعة</span></p>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="work-h">
+    <p class="eyebrow">كيف تعمل إلى يومنا الحالي</p>
+    <h2 class="display" id="work-h">من أين تأتي طاقتها؟</h2>
+    <p>نظرًا لبعد المركبة الشديد عن الشمس، أصبحت الألواح الشمسية بلا فائدة؛ لذا تُزوَّد فويجر بمولّدات الحرارة النظائرية (RTG)، وهي عبارة عن بطاريات نووية حرارية.</p>
+    <p>طريقة عملها: تحتوي على مادة البلوتونيوم-٢٣٨ التي تتحلل طبيعيًا وتصدر حرارة عالية مستمرة، ثم يحوّل المولّد هذه الحرارة مباشرة إلى تيار كهربائي يشغّل أجهزة المركبة دون الحاجة لأي محركات أو أجزاء متحركة.</p>
+    <h3 class="display">كيف لم تتجمد رغم وجودها في الفضاء؟</h3>
+    <p>تصل درجة الحرارة في الفضاء بين النجمي إلى ٢٦٩ درجة تحت الصفر (بالقرب من الصفر المطلق!)، ولحماية المركبة من التجمد:</p>
+    <ul class="points">
+      <li><strong>المدافئ الكهربائية المدمجة</strong>صُممت فويجر بمدافئ حرارية صغيرة تحيط بالأجهزة الحساسة والأنابيب لإبقائها ضمن نطاق حراري يعمل بداخلها.</li>
+      <li><strong>استغلال حرارة المولّد</strong>تُستغل الحرارة الجانبية المنبعثة من بطارية البلوتونيوم لتدفئة الهيكل الداخلي للمركبة.</li>
+      <li><strong>إدارة الطاقة الذكية مع الزمن</strong>مع تراجع طاقة البلوتونيوم تدريجيًا عبر العقود، يقوم مهندسو ناسا بإيقاف الأجهزة غير الضرورية والمدافئ عن الأجزاء الثانوية (مثل الكاميرات التي أُغلقت عام ١٩٩٠)، وذلك لتركيز الطاقة والحرارة المتبقية فقط على الأجهزة الحيوية لتبقى دافئة وتستمر في العمل وإرسال البيانات.</li>
+    </ul>
+  </section>
+
+  <section class="block" aria-labelledby="aliens-h">
+    <p class="eyebrow">ماذا لو عثرت مخلوقات أخرى على المركبة؟</p>
+    <h2 class="display" id="aliens-h">القرص الذهبي</h2>
+    <p>أرسلت ناسا فويجر ١ و٢ ووضعت على كل مركبة قرصًا ذهبيًا يحتوي على صور وأصوات من الأرض مثل أصوات الطبيعة والحيوانات والموسيقى، بالإضافة إلى تحيات بأكثر من ٥٠ لغة، وذلك لإعطاء فكرة عن الحياة والثقافات الموجودة على كوكبنا.</p>
+    <img class="photo" src="../images/voyager-golden-record.jpg" width="1179" height="755" loading="lazy" alt="القرص الذهبي الذي حملته فويجر: صورة للقرص النحاسي المذهّب إلى جانب رسم يوضح رموز التشغيل المحفورة عليه">
+    <p class="cap">القرص الذهبي وتعليمات تشغيله. الصورة: ناسا/مختبر الدفع النفاث (JPL)</p>
+    <p class="fact"><strong>التحية بالعربية</strong>تحياتي لأصدقائنا في النجوم، نتمنى أن نلتقي بكم في يوم من الأيام.</p>
+    <p>وكان الهدف الأساسي منها أنه إذا وُجدت إحدى هذه المركبات بعد زمن طويل، فسيجد معها رسالة تخبره من نحن ومن أين أتينا وكيف تبدو الحياة على الأرض.</p>
+  </section>
+
+  <section class="block" aria-labelledby="pics-h">
+    <p class="eyebrow">كيفية وصول الصور إلينا</p>
+    <h2 class="display" id="pics-h">من الفضاء العميق إلى شاشتك</h2>
+    <p>تُرسل مركبة فويجر المعلومات إلى الأرض باستخدام موجات الراديو، حيث تُجمع المعلومات وتُحوَّل إلى أصفار وواحدات ثم يرسلها الهوائي نحو الأرض. ويستقبل نظام متطور يسمى شبكة الفضاء العميق الإشارة الضعيفة ويحولها إلى صور وبيانات مفهومة. وتستغرق الإشارة من فويجر أكثر من ٢٢ ساعة للوصول إلى الأرض.</p>
+    <h3 class="display">بعض الصور التي التقطتها المركبة</h3>
+    <img class="photo" src="../images/voyager-family-portrait-mosaic.jpg" width="683" height="459" loading="lazy" alt="محاكاة حاسوبية تُظهر مركبة فويجر ١ وفسيفساء الصور الستين التي التقطتها لنظامنا الشمسي، مع صور مصغرة للكواكب">
+    <p class="cap">محاكاة حاسوبية لمسار فويجر وفسيفساء صور «الصورة العائلية». المصدر: ناسا</p>
+    <p class="fact"><strong>صورة عائلية لنظامنا الشمسي</strong>التقطت فويجر أول «صورة عائلية» لنظامنا الشمسي يومي ١٣ و١٤ فبراير ١٩٩٠ من مسافة نحو ٦ مليارات كيلومتر عن الشمس، بعد أن التفتت بأمر من القائمين على المهمة لتصوير الأرض. التقطت ٦٠ صورة ثم أُغلقت كاميراتها نهائيًا لتوفير الطاقة. ولم يظهر كلٌّ من عطارد والمريخ وبلوتو لصعوبة رصدها بسبب قربها من الشمس أو صغرها وبعدها.</p>
+    <img class="photo" src="../images/voyager-saturn.jpg" width="777" height="822" loading="lazy" alt="زحل وحلقاته بألوان مركّبة من ثلاث صور بفلاتر فوق بنفسجية وبنفسجية وخضراء">
+    <p class="cap">زحل بألوان مركّبة. الصورة: ناسا/مختبر الدفع النفاث (JPL)</p>
+    <p class="fact"><strong>زحل</strong>صورة لزحل التقطها مسبار فويجر في ١٢ يوليو ١٩٨١، من مسافة ٤٣ مليون كيلومتر، أُنتجت بدمج ثلاث صور باستخدام فلاتر فوق بنفسجية وبنفسجية وخضراء. وتُظهر تغيرات في غلاف زحل مقارنة برصد فويجر، مع زيادة واضحة في سطوع الحلقات بسبب ارتفاع زاوية سقوط أشعة الشمس.</p>
+    <img class="photo" src="../images/voyager-triton-neptune.jpg" width="1000" height="1000" loading="lazy" alt="القمر ترايتون في المقدمة وخلفه كوكب نبتون الأزرق، من صور فويجر ٢">
+    <p class="cap">ترايتون ونبتون. الصورة: ناسا/مختبر الدفع النفاث (JPL)</p>
+    <p class="fact"><strong>نبتون</strong>تُظهر هذه الصورة المركبة، التي أُنشئت بواسطة الحاسوب من صور التقطها مسبار فويجر ٢ التابع لناسا، كوكب نبتون كما يبدو من مركبة فضائية تقترب من ترايتون، أكبر أقمار نبتون، والذي يبلغ قطره ٢٧٠٦ كم (١٦٨٣ ميلًا).</p>
+  </section>
+
+  <section class="block ending">
+    <p>تعرّفوا على ركن آخر من أركان الأسبوع الفلكي</p>
+    <div class="actions"><a class="cta" href="../">العودة إلى الأسبوع الفلكي</a></div>
+  </section>
+
+</main>
+
+<footer class="wrap">أسبوع الفلك</footer>
+
+<script>
+(function(){
+"use strict";
+/* ---- starfield (same look as the hub; still when reduced motion is on) ---- */
+const cv = document.createElement("canvas");
+cv.id = "starfield"; cv.setAttribute("aria-hidden", "true");
+document.body.prepend(cv);
+const ctx = cv.getContext("2d");
+if(ctx){
+  const still = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+  let stars = [], w = 0, h = 0;
+  function build(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth; h = window.innerHeight;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    let s = 11;
+    const r = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+    const n = Math.round(Math.min(260, Math.max(90, w * h / 4500)));
+    stars = [];
+    for(let i = 0; i < n; i++){
+      stars.push({x:r()*w, y:r()*h, r:r()*1.2 + .3, a:r()*.5 + .25, p:r()*6.28, v:r()*1.5 + .5,
+                  c:r() < .12 ? "255,179,92" : r() < .2 ? "159,216,240" : "237,232,218"});
+    }
+  }
+  function frame(t){
+    ctx.clearRect(0, 0, w, h);
+    for(const st of stars){
+      const a = still ? st.a : st.a * (.7 + .3 * Math.sin(t / 1000 * st.v + st.p));
+      ctx.fillStyle = "rgba(" + st.c + "," + a.toFixed(3) + ")";
+      ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, 6.2832); ctx.fill();
+    }
+    if(!still) requestAnimationFrame(frame);
+  }
+  build(); requestAnimationFrame(frame);
+  window.addEventListener("resize", () => { build(); if(still) requestAnimationFrame(frame); });
+}
+})();
+</script>
+</body>
+</html>
