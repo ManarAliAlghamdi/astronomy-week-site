@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Lalezar&display=swap" rel="stylesheet">
 <style>
 :root{
   --night:#0E1033; --deep:#171A45; --line:#2C3068; --star:#EDE8DA; --muted:#A3A5CB;
@@ -28,7 +28,7 @@ body{
 }
 a{color:inherit}
 :focus-visible{outline:2px solid var(--accretion);outline-offset:3px}
-.display{font-family:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif}
+.display{font-synthesis:none;font-family:"Lalezar","IBM Plex Sans Arabic",Tahoma,sans-serif}
 .wrap{width:100%;max-width:680px;margin:0 auto;padding:0 1.25rem}
 #sceneTop{flex:2 1 0;width:100%;min-height:0}
 #scene{flex:3 1 0;width:100%;min-height:0}
@@ -126,22 +126,22 @@ const STATIONS = [
     title: "السفر عبر الزمن"
   },
   {
+    id: "black-holes", page: "black-holes/", x: 310, y: 150, label: "above",
+    title: "الثقوب السوداء"
+  },
+  {
     id: "voyager", page: "voyager/", x: 160, y: 150, label: "left",
     title: "مركبة فوياجر"
+  },
+  {
+    id: "sounds", page: "https://manaralialghamdi.github.io/space-sounds/", x: 320, y: 270, label: "below",
+    title: "أصوات الفضاء"
   },
   {
     id: "vr", emblem: "vr", x: 215, y: 300, label: "left",
     title: "الفلك بالواقع الافتراضي",
     by: "فاطمة",
     body: "تعالوا إلى ركننا لتعيشوا الفلك بالواقع الافتراضي! ارتدوا النظارة وانطلقوا في رحلة داخل الفضاء، وكأنكم هناك بأنفسكم. فاطمة بانتظاركم لتجربة لا تُنسى."
-  },
-  {
-    id: "black-holes", page: "black-holes/", x: 310, y: 150, label: "above",
-    title: "الثقوب السوداء"
-  },
-  {
-    id: "sounds", page: "https://manaralialghamdi.github.io/space-sounds/", x: 320, y: 270, label: "below",
-    title: "أصوات الفضاء"
   }
 ];
 </script>

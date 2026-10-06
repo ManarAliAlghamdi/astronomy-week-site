@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Lalezar&display=swap" rel="stylesheet">
 <style>
 :root{
   --night:#0E1033; --deep:#171A45; --line:#2C3068; --star:#EDE8DA; --muted:#A3A5CB;
@@ -28,7 +28,7 @@ body{
 }
 a{color:inherit}
 :focus-visible{outline:2px solid var(--accretion);outline-offset:3px}
-.display{font-family:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif}
+.display{font-synthesis:none;font-family:"Lalezar","IBM Plex Sans Arabic",Tahoma,sans-serif}
 .wrap{width:100%;max-width:680px;margin:0 auto;padding:0 1.25rem}
 #starfield{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 [hidden]{display:none!important}
@@ -59,7 +59,7 @@ p{margin:0 0 1.25rem}
 .labels span:last-child{color:var(--plasma)}
 
 .stat{margin:0 0 1.25rem;padding:1rem 1.1rem;background:var(--deep);border-radius:10px;text-align:center}
-.stat b{display:block;font-family:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:clamp(2rem,9vw,2.8rem);line-height:1.2;color:var(--accretion);font-weight:700}
+.stat b{display:block;font-family:"Lalezar","IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:clamp(2rem,9vw,2.8rem);line-height:1.2;color:var(--accretion);font-weight:700}
 .stat span{display:block;color:var(--muted);font-size:.95rem;line-height:1.6}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin:0 0 1.25rem}
 .stats .stat{margin:0;padding:.8rem .4rem}
@@ -73,7 +73,7 @@ p{margin:0 0 1.25rem}
 .steps li::before{content:"";position:absolute;top:2.6rem;bottom:0;right:1.15rem;width:2px;background:var(--line)}
 .steps li:last-child::before{display:none}
 .steps .num{position:absolute;top:0;right:0;width:2.4rem;height:2.4rem;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:var(--night);border:2px solid var(--accretion);color:var(--accretion);font-weight:600;font-family:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif}
+  background:var(--night);border:2px solid var(--accretion);color:var(--accretion);font-weight:600;font-family:"Lalezar","IBM Plex Sans Arabic",Tahoma,sans-serif}
 .steps li:last-child .num{background:var(--accretion);color:#1B1030}
 .steps strong{display:block;font-weight:600;line-height:1.5;padding-top:.2rem}
 .steps span.d{display:block;color:var(--muted);font-size:.97rem;line-height:1.7}
@@ -96,10 +96,14 @@ p{margin:0 0 1.25rem}
 .opt:disabled{cursor:default}
 .opt.correct{background:var(--accretion);border-color:var(--accretion);color:#1B1030;font-weight:600}
 .opt.dim{opacity:.4}
+.opt.wrong{background:#E5484D;border-color:#E5484D;color:#fff;font-weight:600;opacity:1;text-decoration:none}
+.hint{margin:.5rem 0 0;padding:.7rem .9rem;border-radius:8px;background:rgba(229,72,77,.12);border-inline-start:3px solid #E5484D;color:var(--star);font-size:.97rem}
+.hint strong{color:#FF8A8E;font-weight:600}
 .opt.picked.dim{opacity:.55;text-decoration:line-through}
 .result{margin:.9rem 0 0;font-weight:600;min-height:0}
 .result.ok{color:var(--accretion)}
-.result.no{color:var(--plasma)}
+.result.no{color:#FF8A8E}
+#confetti{position:fixed;inset:0;width:100%;height:100%;z-index:60;pointer-events:none}
 .explain{margin:.4rem 0 0;color:var(--muted);font-size:.97rem}
 .retry{
   font:inherit;font-size:.88rem;margin-top:.8rem;min-height:40px;padding:0 1rem;border-radius:999px;
@@ -192,6 +196,11 @@ footer{margin-top:auto;padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;te
     <p class="score" id="score" role="status" aria-live="polite" hidden></p>
   </section>
 
+  <section class="block ending">
+    <p>من أعماق الثقوب السوداء إلى أبعد نقطة وصل إليها الإنسان، تابعوا رحلة مركبة فوياجر</p>
+    <a class="cta" href="../voyager/">مركبة فوياجر</a>
+  </section>
+
 </main>
 
 <footer class="wrap">أسبوع الفلك</footer>
@@ -204,12 +213,15 @@ footer{margin-top:auto;padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;te
 const QUIZ = [
   { q: "لو تحوّلت الشمس إلى ثقب أسود، ستبتلع الأرض",
     options: ["صح", "خطأ"], correct: 1,
+    hint: "الجاذبية تعتمد على الكتلة والمسافة، لا على كون الجسم ثقبًا أسود.",
     why: "ثقب أسود بكتلة الشمس نفسها له الجاذبية نفسها على بُعد الأرض، فستبقى الأرض في مدارها. لكنها ستصبح مظلمة ومتجمدة." },
   { q: "لو ضُغطت الأرض لتصبح ثقبًا أسود، كم سيكون حجمها؟",
     options: ["كرة قدم", "برتقالة", "حبة عنب"], correct: 2,
+    hint: "الحجم أصغر بكثير مما تتخيل، بضعة سنتيمترات فقط.",
     why: "قطرها نحو ١٫٨ سم فقط، وفيها كل كتلة الأرض." },
   { q: "بعض الثقوب السوداء العملاقة متوسط كثافتها أقل من الماء",
     options: ["صح", "خطأ"], correct: 0,
+    hint: "كلما كبر الثقب الأسود زاد حجمه أسرع من زيادة كتلته، فماذا يحدث لمتوسط الكثافة؟",
     why: "كلما كبر الثقب الأسود قلّ متوسط كثافته داخل أفق الحدث؛ والثقوب التي تزيد كتلتها عن نحو ١٠٠ مليون شمس أقل كثافة من الماء." }
 ];
 const AR = "٠١٢٣٤٥٦٧٨٩";
@@ -223,6 +235,51 @@ function updateScore(){
   scoreEl.textContent = "أجبت عن " + ar(n) + " من " + ar(QUIZ.length) + " إجابة صحيحة";
   scoreEl.hidden = false;
 }
+
+/* ---- celebration: a short chime and confetti from the tapped answer ---- */
+let audio = null;
+function chime(){
+  try{
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    const t0 = audio.currentTime;
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, n) => {
+      const o = audio.createOscillator(), g = audio.createGain();
+      o.type = "triangle"; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t0 + n * .09);
+      g.gain.exponentialRampToValueAtTime(.2, t0 + n * .09 + .02);
+      g.gain.exponentialRampToValueAtTime(.0001, t0 + n * .09 + .35);
+      o.connect(g); g.connect(audio.destination);
+      o.start(t0 + n * .09); o.stop(t0 + n * .09 + .4);
+    });
+  }catch(e){}
+}
+function confetti(from){
+  if(window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+  const c = document.createElement("canvas"); c.id = "confetti"; c.setAttribute("aria-hidden", "true");
+  document.body.appendChild(c);
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), W = window.innerWidth, H = window.innerHeight;
+  c.width = W * dpr; c.height = H * dpr;
+  const g = c.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const r = from.getBoundingClientRect(), ox = r.left + r.width / 2, oy = r.top + r.height / 2;
+  const cols = ["#FFB35C", "#9FD8F0", "#EDE8DA", "#FF8A8E", "#B9A7FF", "#7EE0A8"];
+  const bits = Array.from({length: 90}, () => {
+    const a = -Math.PI / 2 + (Math.random() - .5) * 2.4, v = 250 + Math.random() * 450;
+    return {x:ox, y:oy, vx:Math.cos(a) * v, vy:Math.sin(a) * v, s:4 + Math.random() * 5, rot:Math.random() * 6.28, vr:(Math.random() - .5) * 12, c:cols[(Math.random() * cols.length) | 0]};
+  });
+  let last = performance.now(), age = 0;
+  (function tick(now){
+    const dt = Math.min(.04, (now - last) / 1000); last = now; age += dt;
+    g.clearRect(0, 0, W, H);
+    bits.forEach(b => {
+      b.vy += 900 * dt; b.vx *= .995; b.x += b.vx * dt; b.y += b.vy * dt; b.rot += b.vr * dt;
+      g.save(); g.translate(b.x, b.y); g.rotate(b.rot);
+      g.globalAlpha = Math.max(0, 1 - age / 2.2);
+      g.fillStyle = b.c; g.fillRect(-b.s / 2, -b.s / 3, b.s, b.s * .66); g.restore();
+    });
+    if(age < 2.2) requestAnimationFrame(tick); else c.remove();
+  })(last);
+}
+function celebrate(btn){ chime(); confetti(btn); }
 
 QUIZ.forEach((item, i) => {
   const box = document.createElement("fieldset");
@@ -241,26 +298,32 @@ QUIZ.forEach((item, i) => {
     return b;
   });
 
+  const hint = document.createElement("p"); hint.className = "hint"; hint.hidden = true;
+  const hs = document.createElement("strong"); hs.textContent = "تلميح: ";
+  hint.append(hs, item.hint || ""); box.insertBefore(hint, why);
+
   function answer(j){
     if(state[i] !== null) return;
     const right = j === item.correct;
     state[i] = right;
     btns.forEach((b, k) => {
       b.disabled = true;
-      b.classList.toggle("correct", k === item.correct);
-      b.classList.toggle("dim", k !== item.correct);
+      b.classList.toggle("correct", right && k === j);
+      b.classList.toggle("wrong", !right && k === j);
+      b.classList.toggle("dim", k !== j);
       b.classList.toggle("picked", k === j);
     });
-    result.textContent = right ? "إجابة صحيحة!" : "ليست هذه الإجابة";
+    result.textContent = right ? "إجابة صحيحة!" : "ليست هذه الإجابة، جرّب مرة أخرى";
     result.className = "result " + (right ? "ok" : "no");
-    why.hidden = false; retry.hidden = false;
+    why.hidden = !right; hint.hidden = right; retry.hidden = right;   // wrong: hint + try again; right: explanation
+    if(right) celebrate(btns[j]);
     updateScore();
   }
   retry.addEventListener("click", () => {
     state[i] = null;
-    btns.forEach(b => { b.disabled = false; b.classList.remove("correct", "dim", "picked"); });
+    btns.forEach(b => { b.disabled = false; b.classList.remove("correct", "wrong", "dim", "picked"); });
     result.textContent = ""; result.className = "result";
-    why.hidden = true; retry.hidden = true;
+    why.hidden = true; hint.hidden = true; retry.hidden = true;
     updateScore();
     btns[0].focus();
   });

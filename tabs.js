@@ -6,10 +6,10 @@
   var TABS = [
     ["الرئيسية", ""],
     ["السفر عبر الزمن", "time-travel/"],
-    ["مركبة فوياجر", "voyager/"],
-    ["الفلك بالواقع الافتراضي", "#vr"],
     ["الثقوب السوداء", "black-holes/"],
-    ["أصوات الفضاء", "https://manaralialghamdi.github.io/space-sounds/"]
+    ["مركبة فوياجر", "voyager/"],
+    ["أصوات الفضاء", "https://manaralialghamdi.github.io/space-sounds/"],
+    ["الفلك بالواقع الافتراضي", "#vr"]
   ];
   var css = document.createElement("style");
   css.textContent =
