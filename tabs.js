@@ -8,8 +8,8 @@
     ["السفر عبر الزمن", "time-travel/"],
     ["الثقوب السوداء", "black-holes/"],
     ["مركبة فوياجر", "voyager/"],
-    ["أصوات الفضاء", "https://manaralialghamdi.github.io/space-sounds/"],
-    ["الفلك بالواقع الافتراضي", "#vr"]
+    ["الفلك بالواقع الافتراضي", "#vr"],
+    ["أصوات الفضاء", "https://manaralialghamdi.github.io/space-sounds/"]
   ];
   var css = document.createElement("style");
   css.textContent =
