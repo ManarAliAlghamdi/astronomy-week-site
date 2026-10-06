@@ -34,13 +34,16 @@ a{color:inherit}
 #scene{flex:3 1 0;width:100%;min-height:0}
 /* home page fits the screen exactly: no scrolling */
 html.home,html.home body{height:100vh;height:100svh;overflow:hidden}
-html.home footer{display:none}
+html.home footer{padding:.6rem 0 calc(.6rem + env(safe-area-inset-bottom,0px))}
 
 /* hero: the stations as a constellation */
 .hero{padding:.5rem 1.25rem .5rem;text-align:center}
-.hero h1{margin:0;font-size:clamp(2.2rem,9vw,3.2rem);line-height:1.1;font-weight:700}
-.hero p{margin:.6rem auto 0;color:var(--muted);max-width:28rem}
-.sky{display:block;width:auto;max-width:100%;height:min(46vh,440px);height:min(46svh,440px);margin:.5rem auto 0;overflow:visible}
+.hero .logo{display:block;height:clamp(40px,7svh,52px);width:auto;margin:0 auto .5rem;padding:.35rem .8rem;background:var(--star);border-radius:10px}
+.hero h1{margin:0;font-size:clamp(1.9rem,8vw,2.8rem);line-height:1.1;font-weight:700}
+.hero .team{margin:.35rem 0 0;color:var(--accretion);font-size:clamp(1.3rem,5.5vw,1.7rem);line-height:1.2;font-weight:700}
+.hero .course{margin:.1rem 0 0;color:var(--star);font-size:clamp(.85rem,3.4vw,1rem);line-height:1.5}
+.hero p.intro{margin:.4rem auto 0;color:var(--muted);max-width:28rem;font-size:clamp(.82rem,3.3vw,.95rem);line-height:1.6}
+.sky{display:block;width:auto;max-width:100%;height:min(40vh,420px);height:min(40svh,420px);margin:.5rem auto 0;overflow:visible}
 .sky .link{stroke:var(--star);stroke-opacity:.4;stroke-width:1.5;fill:none}
 .sky a{cursor:pointer;text-decoration:none}
 .sky .halo{fill:var(--accretion);opacity:.22}
@@ -81,7 +84,6 @@ html.home footer{display:none}
 
 /* one topic at a time */
 [hidden]{display:none!important}
-.tabs{display:none!important}   /* the shared top bar (tabs.js) replaces this row */
 .tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(.4rem,2vw,.7rem);padding-top:1.25rem;padding-bottom:.25rem}
 .tabs a{
   display:inline-flex;align-items:center;justify-content:center;text-align:center;
@@ -96,7 +98,6 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;text-align:center;
 </style>
 </head>
 <body>
-<script src="tabs.js"></script>
 
 <script>
 /* =====================================================================
@@ -112,7 +113,9 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;text-align:center;
 const EVENT = {
   title: "أسبوع الفلك",
   intro: "اكتشفوا أركان معرضنا. اضغطوا على أي نجمة للانتقال إلى ركنها.",
-  footer: "أسبوع الفلك"
+  team: "نيبيولا",
+  course: "فلك ١٠٢ شعبة 70522",
+  madeBy: "تصميم وتطوير: منار الغامدي "
 };
 
 const STATIONS = [
@@ -128,7 +131,7 @@ const STATIONS = [
     id: "vr", emblem: "vr", x: 90, y: 200,
     title: "الفلك بالواقع الافتراضي",
     by: "فاطمة",
-    body: "محطة تفاعلية تحوّل ما نتعلمه عن الفلك إلى تجربة تعيشها بنفسك. ارتدِ النظارة وتجوّل في الفضاء عن قرب."
+    body: "تعالوا إلى ركننا لتعيشوا الفلك بالواقع الافتراضي! ارتدوا النظارة وانطلقوا في رحلة داخل الفضاء، وكأنكم هناك بأنفسكم. فاطمة بانتظاركم لتجربة لا تُنسى."
   },
   {
     id: "black-holes", page: "black-holes/", x: 265, y: 275,
@@ -144,8 +147,11 @@ const STATIONS = [
 <div id="sceneTop" aria-hidden="true"></div>
 
 <header class="hero wrap">
+  <img class="logo" src="images/ksu-logo.png" alt="شعار جامعة الملك سعود">
   <h1 class="display" id="eventTitle"></h1>
-  <p id="eventIntro"></p>
+  <p class="team display" id="eventTeam"></p>
+  <p class="course" id="eventCourse"></p>
+  <p class="intro" id="eventIntro"></p>
   <svg class="sky" id="sky" viewBox="0 0 360 420" role="navigation" aria-label="أركان المعرض"></svg>
 </header>
 
@@ -170,7 +176,9 @@ const el = (tag, attrs, parent) => {
 
 document.getElementById("eventTitle").textContent = EVENT.title;
 document.getElementById("eventIntro").textContent = EVENT.intro;
-document.getElementById("footer").textContent = EVENT.footer;
+document.getElementById("eventTeam").textContent = EVENT.team;
+document.getElementById("eventCourse").textContent = EVENT.course;
+document.getElementById("footer").textContent = EVENT.madeBy;
 document.title = EVENT.title;
 
 /* ---- constellation ---- */
