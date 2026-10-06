@@ -34,6 +34,7 @@ a{color:inherit}
 #scene{flex:3 1 0;width:100%;min-height:0}
 /* home page fits the screen exactly: no scrolling */
 html.home,html.home body{height:100vh;height:100svh;overflow:hidden}
+html:not(.home) footer{display:none}   /* the credit shows on the main page only */
 html.home footer{padding:.6rem 0 calc(.6rem + env(safe-area-inset-bottom,0px))}
 
 /* hero: the stations as a constellation */
