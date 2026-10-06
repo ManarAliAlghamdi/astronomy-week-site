@@ -48,7 +48,7 @@ html.home footer{padding:.6rem 0 calc(.6rem + env(safe-area-inset-bottom,0px))}
 .sky a{cursor:pointer;text-decoration:none}
 .sky .halo{fill:var(--accretion);opacity:.22}
 .sky .core{fill:var(--star)}
-.sky text{fill:var(--star);font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:19px;font-weight:600}
+.sky text{fill:var(--star);font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:19px;font-weight:600;paint-order:stroke;stroke:var(--night);stroke-width:5px;stroke-linejoin:round}
 .sky a:hover .halo,.sky a:focus-visible .halo{opacity:.4}
 .sky .bg{fill:var(--star)}
 .hint{color:var(--muted);font-size:.9rem;margin:0}
@@ -106,9 +106,10 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;text-align:center;
    by (presenters), body, emblem (time | voyager | vr | blackhole).
    Optional: fact, image ("images/file.jpg"), link { label, href },
    or links [{ label, href }, ...] for several buttons (first is filled, rest outlined).
+   label: "above" | "below" | "left" | "right" puts the name on that side of its star.
    page: "folder/" makes the star and tab open that separate page instead of a section here
    (then only id, title, x, y are needed).
-   x, y place the star in the top constellation (0-360 across, 0-420 down).
+   x, y place the star in the top constellation (0-360 across, 0-370 down).
    ===================================================================== */
 const EVENT = {
   title: "أسبوع الفلك",
@@ -120,25 +121,25 @@ const EVENT = {
 
 const STATIONS = [
   {
-    id: "time-travel", page: "time-travel/", x: 85, y: 50,
+    id: "time-travel", page: "time-travel/", x: 70, y: 30, label: "right",
     title: "السفر عبر الزمن"
   },
   {
-    id: "voyager", page: "voyager/", x: 272, y: 120,
+    id: "voyager", page: "voyager/", x: 160, y: 150, label: "left",
     title: "مركبة فوياجر"
   },
   {
-    id: "vr", emblem: "vr", x: 90, y: 200,
+    id: "vr", emblem: "vr", x: 215, y: 300, label: "left",
     title: "الفلك بالواقع الافتراضي",
     by: "فاطمة",
     body: "تعالوا إلى ركننا لتعيشوا الفلك بالواقع الافتراضي! ارتدوا النظارة وانطلقوا في رحلة داخل الفضاء، وكأنكم هناك بأنفسكم. فاطمة بانتظاركم لتجربة لا تُنسى."
   },
   {
-    id: "black-holes", page: "black-holes/", x: 265, y: 275,
+    id: "black-holes", page: "black-holes/", x: 310, y: 150, label: "above",
     title: "الثقوب السوداء"
   },
   {
-    id: "sounds", page: "https://manaralialghamdi.github.io/space-sounds/", x: 110, y: 355,
+    id: "sounds", page: "https://manaralialghamdi.github.io/space-sounds/", x: 320, y: 270, label: "below",
     title: "أصوات الفضاء"
   }
 ];
@@ -152,7 +153,7 @@ const STATIONS = [
   <p class="team display" id="eventTeam"></p>
   <p class="course" id="eventCourse"></p>
   <p class="intro" id="eventIntro"></p>
-  <svg class="sky" id="sky" viewBox="0 0 360 420" role="navigation" aria-label="أركان المعرض"></svg>
+  <svg class="sky" id="sky" viewBox="0 0 360 370" role="navigation" aria-label="أركان المعرض"></svg>
 </header>
 
 <div id="scene" aria-hidden="true"></div>
@@ -187,31 +188,28 @@ const sky = document.getElementById("sky");
 let seed = 7;
 const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
 for(let i = 0; i < 70; i++){
-  el("circle", {class:"bg", cx:(rnd()*420).toFixed(1), cy:(rnd()*360).toFixed(1), r:(rnd()*1.1 + .3).toFixed(2), opacity:(rnd()*.5 + .15).toFixed(2)}, sky);
+  el("circle", {class:"bg", cx:(rnd()*360).toFixed(1), cy:(rnd()*370).toFixed(1), r:(rnd()*1.1 + .3).toFixed(2), opacity:(rnd()*.5 + .15).toFixed(2)}, sky);
 }
-// lines join the stations in order, closing the shape
-const pts = STATIONS.map(s => [s.x, s.y]);
-if(pts.length > 1){
-  const d = pts.map((p, i) => (i ? "L" : "M") + p[0] + " " + p[1]).join(" ") + (pts.length > 2 ? " Z" : "");
-  const path = el("path", {class:"link", d}, sky);
-  const len = Math.ceil(path.getTotalLength ? path.getTotalLength() : 800);
-  path.style.setProperty("--len", len);
-}
+// the stars form the Big Dipper (الدب الأكبر): a handle and a bowl. Two of its seven stars are just decoration.
+const DIPPER = [[70,30],[110,100],[160,150],[210,185],[310,150],[320,270],[215,300],[210,185]];
+const dip = el("path", {class:"link", d:DIPPER.map((p, i) => (i ? "L" : "M") + p[0] + " " + p[1]).join(" ")}, sky);
+dip.style.setProperty("--len", Math.ceil(dip.getTotalLength ? dip.getTotalLength() : 900));
+[[110,100],[210,185]].forEach(p => el("circle", {class:"core", cx:p[0], cy:p[1], r:3.5}, sky));
 STATIONS.forEach((s, i) => {
   const a = el("a", {href:s.page || "#" + s.id, class:"star"}, sky);
   a.style.setProperty("--d", (0.2 + i*0.25) + "s");
   el("title", {}, a).textContent = s.title;
   el("circle", {class:"halo", cx:s.x, cy:s.y, r:22}, a);
   el("circle", {class:"core", cx:s.x, cy:s.y, r:7}, a);
-  // keep labels inside the frame: put them below stars near the top, above otherwise
-  const below = s.y < 100;
-  const t = el("text", {x:s.x, y:s.y + (below ? 38 : -30), "text-anchor":"middle"}, a);
+  const side = s.label || "above";
+  // the page is right-to-left, so "start"/"end" are flipped for left/right labels
+  const at = {above:[s.x, s.y - 26, "middle"], below:[s.x, s.y + 40, "middle"], left:[s.x - 20, s.y + 6, "start"], right:[s.x + 20, s.y + 6, "end"]}[side];
+  const t = el("text", {x:at[0], y:at[1], "text-anchor":at[2]}, a);
   t.textContent = s.title;
   // nudge long labels back inside the sky so none get cut off at the screen edge
   try{
     const w = t.getComputedTextLength();
-    const cx = Math.min(Math.max(s.x, w/2 + 6), 360 - w/2 - 6);
-    t.setAttribute("x", cx);
+    if(side === "above" || side === "below") t.setAttribute("x", Math.min(Math.max(s.x, w/2 + 6), 360 - w/2 - 6));
   }catch(e){}
 });
 
