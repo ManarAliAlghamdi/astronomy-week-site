@@ -9,7 +9,7 @@
     ["مركبة فوياجر", "voyager/"],
     ["الفلك بالواقع الافتراضي", "#vr"],
     ["الثقوب السوداء", "black-holes/"],
-    ["أصوات الفضاء", "sounds/"]
+    ["أصوات الفضاء", "https://manaralialghamdi.github.io/space-sounds/"]
   ];
   var css = document.createElement("style");
   css.textContent =
@@ -27,14 +27,14 @@
   var here = location.pathname.replace(/index\.html$/, "");
   var links = TABS.map(function(t){
     var a = document.createElement("a");
-    a.href = base + t[1]; a.textContent = t[0];
+    a.href = /^https?:/.test(t[1]) ? t[1] : base + t[1]; a.textContent = t[0];
     a.u = new URL(a.href, location.href);
     nav.appendChild(a);
     return a;
   });
   function mark(){
     links.forEach(function(a){
-      var on = a.u.pathname === here && (a.u.hash ? location.hash === a.u.hash : location.hash !== "#vr");
+      var on = a.u.origin === location.origin && a.u.pathname === here && (a.u.hash ? location.hash === a.u.hash : location.hash !== "#vr");
       if(on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
   }
